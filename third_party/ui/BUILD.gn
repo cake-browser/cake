@@ -1,0 +1,75 @@
+import("//tools/typescript/ts_library.gni")
+import("//ui/webui/resources/tools/bundle_js.gni")
+import("//ui/webui/resources/tools/generate_grd.gni")
+import("//ui/webui/resources/tools/minify_js.gni")
+import("//ui/webui/webui_features.gni")
+
+ts_library("build_ts") {
+  visibility = [
+    ":build_bundle",
+    "//chrome/browser/resources/cake_new_tab:build_ts",
+    "//chrome/browser/resources/hello_world:build_ts",
+  ]
+
+  tsconfig_base = "//tools/typescript/tsconfig_base_react.json"
+  composite = true
+  in_files = [
+    "ui.ts",
+    "src/deps/react.ts",
+    "src/utils/cn.ts",
+    "src/providers/ThemeProvider/index.ts",
+    "src/providers/ThemeProvider/ThemeProvider.tsx",
+    "src/providers/ThemeProvider/themes.ts",
+    "src/components/Icon/index.ts",
+    "src/components/Icon/icons.ts",
+    "src/components/Icon/Icon.tsx",
+  ]
+
+  node_modules = "//third_party/node/node_modules"
+  definitions = [
+    "${node_modules}/csstype/index.d.ts",
+    "${node_modules}/@types/prop-types/index.d.ts",
+    "${node_modules}/@types/react/global.d.ts",
+    "${node_modules}/@types/react/index.d.ts",
+    "${node_modules}/@types/react-dom/index.d.ts",
+    "${node_modules}/@tabler/icons-react/dist/tabler-icons-react.d.ts",
+  ]
+
+  path_mappings = [
+    "csstype|" + 
+        rebase_path("${node_modules}/csstype/index.d.ts", target_gen_dir),
+    "prop-types|" +
+        rebase_path("${node_modules}/@types/prop-types/index.d.ts", target_gen_dir),
+    "react|" +
+        rebase_path("${node_modules}/@types/react/index.d.ts", target_gen_dir),
+    "react-dom|" +
+        rebase_path("${node_modules}/@types/react-dom/index.d.ts", target_gen_dir),
+    "@tabler/icons-react|" +
+        rebase_path("${node_modules}/@tabler/icons-react/dist/tabler-icons-react.d.ts", target_gen_dir),
+  ]
+}
+
+bundle_js("build_bundle") {
+  host = "_ignored_"
+  input = rebase_path(target_gen_dir, root_build_dir)
+  js_module_in_files = [ "ui.js" ]
+  rollup_config = "rollup.config.mjs"
+  out_folder = "$target_gen_dir/bundled"
+  deps = [ ":build_ts" ]
+}
+
+minify_js("build_min_js") {
+  deps = [ ":build_bundle" ]
+  in_folder = "$target_gen_dir/bundled"
+  in_files = [ "ui.rollup.js" ]
+  out_folder = "$target_gen_dir/minified"
+  out_manifest = "${target_gen_dir}/build_min_js_manifest.json"
+}
+
+generate_grd("build_grdp") {
+  grd_prefix = "ui"
+  out_grd = "$target_gen_dir/resources.grdp"
+  resource_path_prefix = "ui"
+  manifest_files = [ "${target_gen_dir}/build_min_js_manifest.json" ]
+  deps = [ ":build_min_js" ]
+}

@@ -1,0 +1,3 @@
+#!/bin/bash
+
+out/release/Cake.app/Contents/MacOS/Cake --enable-ui-devtools

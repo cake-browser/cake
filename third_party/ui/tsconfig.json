@@ -1,0 +1,21 @@
+{
+    "include": ["src"],
+    "exclude": ["node_modules", "dist", "src/deps/react-*.ts"],
+    "compilerOptions": {
+        "declaration": true,
+        "declarationMap": true,
+        "module": "ESNext",
+        "target": "ESNext",
+        "outDir": "dist",
+        "rootDir": "src",
+        "sourceMap": true,
+        "strict": true,
+        "esModuleInterop": true,
+        "moduleResolution": "Node",
+        "forceConsistentCasingInFileNames": true,
+        "stripInternal": true,
+        "allowSyntheticDefaultImports": true,
+        "resolveJsonModule": true,
+        "jsx": "react-jsx"
+    }
+}

@@ -1,0 +1,20 @@
+import("//ui/webui/resources/tools/build_webui.gni")
+
+build_webui("build") {
+  grd_prefix = "cake_new_tab"
+  webui_context_type = "trusted"
+
+  static_files = [
+    "index.html",
+    "index.css"
+  ]
+
+  non_web_component_files = [
+    "index.tsx",
+    "app.tsx"
+  ]
+
+  ts_deps = [ 
+    "//third_party/ui:build_ts"
+  ]
+}

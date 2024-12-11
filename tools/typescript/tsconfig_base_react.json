@@ -1,0 +1,17 @@
+{
+  "extends": "./tsconfig_base.json",
+  "compilerOptions": {
+    "useDefineForClassFields": false,
+    "allowSyntheticDefaultImports": true,
+    "noImplicitAny": false,
+    "jsx": "react-jsx",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "noPropertyAccessFromIndexSignature": false,
+    "noUncheckedIndexedAccess": false
+  },
+  "include": ["**/*.tsx"]
+}

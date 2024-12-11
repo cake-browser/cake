@@ -1,0 +1,75 @@
+{
+    "name": "@cake.dev/ui",
+    "version": "0.0.6",
+    "description": "Cake UI",
+    "keywords": [
+        "javascript",
+        "typescript",
+        "cake",
+        "ui",
+        "components",
+        "library"
+    ],
+    "homepage": "https://github.com/cake-browser/cake",
+    "bugs": "https://github.com/cake-browser/cake/issues",
+    "license": "MIT",
+    "author": "Cake",
+    "files": [
+        "dist",
+        "src"
+    ],
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "sideEffects": false,
+    "repository": "cake-browser/cake",
+    "scripts": {
+        "clean": "rimraf dist",
+        "format": "prettier --write \"{src,test}/**/*.{ts,tsx}\"",
+        "build": "run-s clean format build:* copy-css",
+        "build:main": "tsc -p tsconfig.json",
+        "build:sass": "sass --no-source-map src/styles/index.scss:src/styles/index.css",    
+        "sass": "sass --no-source-map --watch src/styles/index.scss:src/styles/index.css",
+        "copy-css": "copyfiles -u 1 \"src/**/*.css\" dist",
+        "types-generate": "dts-gen -m '@cake.dev/ui' -s"
+    },
+    "dependencies": {
+        "@tabler/icons-react": "^2.1.0"
+    },
+    "devDependencies": {
+        "@types/node": "^20.14.8",
+        "@types/react": "18.3.12",
+        "@types/react-dom": "18.3.1",
+        "copyfiles": "^2.4.1",
+        "husky": "^4.3.0",
+        "npm-run-all": "^4.1.5",
+        "prettier": "^2.1.2",
+        "pretty-quick": "^3.1.0",
+        "prop-types": "15.8.1",
+        "react": "18.3.1",
+        "react-dom": "18.3.1",
+        "rimraf": "^3.0.2",
+        "ts-loader": "^9.5.1",
+        "typescript": "5.5.3"
+    },
+    "peerDependencies": {
+        "react": "^18.0.0",
+        "react-dom": "^18.0.0",
+        "prop-types": "^15.8.1"
+    },
+    "peerDependenciesMeta": {
+        "react": {
+            "optional": true
+        },
+        "react-dom": {
+            "optional": true
+        },
+        "prop-types": {
+            "optional": true
+        }
+    },
+    "husky": {
+        "hooks": {
+            "pre-commit": "pretty-quick --staged"
+        }
+    }
+}

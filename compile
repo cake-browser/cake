@@ -1,0 +1,3 @@
+#!/bin/bash
+
+autoninja -C out/release chrome

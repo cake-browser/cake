@@ -1,0 +1,18 @@
+import("//ui/webui/resources/tools/build_webui.gni")
+
+build_webui("build") {
+  grd_prefix = "hello_world"
+  webui_context_type = "trusted"
+
+  static_files = [ 
+    "hello_world.html",
+    "hello_world.css"
+  ]
+
+  non_web_component_files = [ 
+    "hello_world.tsx",
+    "app.tsx"
+  ]
+
+  ts_deps = [ "//third_party/ui:build_ts" ]
+}
