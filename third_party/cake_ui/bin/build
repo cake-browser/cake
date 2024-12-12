@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [ ! -d "node_modules" ]; then
-  npm install
+  npm install --legacy-peer-deps
 fi
 
 npm run build

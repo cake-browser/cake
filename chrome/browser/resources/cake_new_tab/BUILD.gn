@@ -6,7 +6,8 @@ build_webui("build") {
 
   static_files = [
     "index.html",
-    "index.css"
+    "index.css",
+    "ui.css"
   ]
 
   non_web_component_files = [
