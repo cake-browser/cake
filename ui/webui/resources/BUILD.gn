@@ -39,12 +39,12 @@ generate_grd("build_grd") {
     "mojo:build_grdp",
     "//third_party/jstemplate:build_grdp",
     "//third_party/lit/v3_0:build_grdp",
-    "//third_party/ui:build_grdp",
+    "//third_party/cake_ui:build_grdp",
   ]
   grdp_files = [
     "$root_gen_dir/third_party/jstemplate/resources.grdp",
     "$root_gen_dir/third_party/lit/v3_0/resources.grdp",
-    "$root_gen_dir/third_party/ui/resources.grdp",
+    "$root_gen_dir/third_party/cake_ui/resources.grdp",
     "$target_gen_dir/cr_components/commerce/resources.grdp",
     "$target_gen_dir/cr_elements/resources.grdp",
     "$target_gen_dir/css/resources.grdp",

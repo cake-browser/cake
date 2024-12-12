@@ -64,9 +64,9 @@ def _add_third_party_lit_mappings(path_mappings, root_gen_dir):
 
 
 def _add_third_party_ui_mappings(path_mappings, root_gen_dir):
-  path_mappings[f'//third_party/ui:build_ts'] = [
-      ('//resources/ui/ui.rollup.js',
-       f'{root_gen_dir}/third_party/ui/ui.d.ts'),
+  path_mappings[f'//third_party/cake_ui:build_ts'] = [
+      ('//resources/cake_ui/ui.rollup.js',
+       f'{root_gen_dir}/third_party/cake_ui/ui.d.ts'),
   ]
 
 

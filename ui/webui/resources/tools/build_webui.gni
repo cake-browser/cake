@@ -341,7 +341,7 @@ template("build_webui") {
                          [ "//third_party/polymer/v3_0:library" ]) != []          
       if (has_polymer) {
         tsconfig_base = "//tools/typescript/tsconfig_base_polymer.json"
-      } else if (filter_include(invoker.ts_deps, [ "//third_party/ui:build_ts" ]) != []) {
+      } else if (filter_include(invoker.ts_deps, [ "//third_party/cake_ui:build_ts" ]) != []) {
         tsconfig_base = "//tools/typescript/tsconfig_base_react.json"
       } else {
         has_lit = filter_include(invoker.ts_deps,

@@ -33,11 +33,17 @@ function plugin() {
 
   // URL mappings from bare import URLs to file paths.
   const redirects = new Map([
-    ['react', path.join(hereDir, 'src/deps/react-esm.ts')],
-    ['react-dom', path.join(hereDir, 'src/deps/react-dom-esm.ts')],
+    // Custom UMD->ESM mappings
+    ['react', path.join(hereDir, 'src/deps/esm/react.ts')],
+    ['react-dom', path.join(hereDir, 'src/deps/esm/react-dom.ts')],
+    ['prop-types', path.join(hereDir, 'src/deps/esm/prop-types.ts')],
+
+    // Native UMD
     ['react/index.js', path.join(pathToNodeModules, 'react/umd/react.production.min.js')],
     ['react-dom/index.js', path.join(pathToNodeModules, 'react-dom/umd/react-dom.production.min.js')],
-    ['prop-types', path.join(pathToNodeModules, 'prop-types/prop-types.min.js')],
+    ['prop-types/index.js', path.join(pathToNodeModules, 'prop-types/prop-types.min.js')],
+
+    // Native ESM
     ['@tabler/icons-react', path.join(pathToNodeModules, '@tabler/icons-react/dist/esm/tabler-icons-react.js')],
   ]);
 

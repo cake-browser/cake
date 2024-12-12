@@ -1,14 +1,6 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import 'prop-types';
+import 'react/index.js';
 
-if (typeof globalThis.React === 'undefined') {
-  globalThis.React = React;
-}
-
-if (typeof globalThis.ReactDOM === 'undefined') {
-  globalThis.ReactDOM = ReactDOM;
-}
+const React = globalThis.React;
 
 const {
   forwardRef,
@@ -24,12 +16,7 @@ const {
   createElement,
 } = React;
 
-const jsx = createElement;
-const jsxs = jsx;
-
 export {
-  React,
-  ReactDOM,
   forwardRef,
   useCallback,
   useContext,
@@ -39,8 +26,8 @@ export {
   useRef,
   useState,
   useTransition,
-  jsx,
-  jsxs,
   createContext,
   createElement,
-};
+}
+
+export default React;

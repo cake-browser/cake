@@ -1,4 +1,4 @@
-import { React, ReactDOM } from '//resources/ui/ui.rollup.js';
+import { React, ReactDOM } from '//resources/cake_ui/ui.rollup.js';
 import App from './app.js';
 
 // @ts-ignore

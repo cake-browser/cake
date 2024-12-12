@@ -14,5 +14,5 @@ build_webui("build") {
     "app.tsx"
   ]
 
-  ts_deps = [ "//third_party/ui:build_ts" ]
+  ts_deps = [ "//third_party/cake_ui:build_ts" ]
 }

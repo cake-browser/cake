@@ -123,7 +123,7 @@ template("bundle_js") {
     }
     external_paths += [ "//resources/lit/v3_0/|$lit_path" ]
 
-    ui_path = rebase_path("${root_gen_dir}/third_party/ui/minified/",
+    ui_path = rebase_path("${root_gen_dir}/third_party/cake_ui/minified/",
                            root_build_dir)
     if (!is_chrome_untrusted) {
       external_paths += [ "chrome://resources/ui/|$ui_path" ]

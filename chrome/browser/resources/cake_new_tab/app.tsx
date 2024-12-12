@@ -1,4 +1,4 @@
-import { React, useContext, useEffect, themes, ThemeProvider, ThemeContext, Icon } from '//resources/ui/ui.rollup.js';
+import { React, useContext, useEffect, themes, ThemeProvider, ThemeContext, Icon } from '//resources/cake_ui/ui.rollup.js';
 
 const ThemeSwitcher = () => {
   const { theme, setTheme } = useContext(ThemeContext);

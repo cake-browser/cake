@@ -15,9 +15,6 @@ pids
 *.seed
 *.pid.lock
 
-# Scripts
-bin/
-
 # Main CSS
 src/styles/index.css
 src/styles/index.css.map

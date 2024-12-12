@@ -67,9 +67,9 @@ minify_js("build_min_js") {
 }
 
 generate_grd("build_grdp") {
-  grd_prefix = "ui"
+  grd_prefix = "cake_ui"
   out_grd = "$target_gen_dir/resources.grdp"
-  resource_path_prefix = "ui"
+  resource_path_prefix = "cake_ui"
   manifest_files = [ "${target_gen_dir}/build_min_js_manifest.json" ]
   deps = [ ":build_min_js" ]
 }
