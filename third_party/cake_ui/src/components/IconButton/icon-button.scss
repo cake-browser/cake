@@ -1,0 +1,97 @@
+.ck-icon-button {
+  @include iflex-container;
+  padding: var(--spacing-md);
+  box-shadow: none !important;
+  outline: none !important;
+  border: none;
+
+  svg {
+    display: inline-block;
+    height: auto;
+    stroke: currentColor;
+  }
+
+  // -- Size ----------
+
+  &.ck-icon-button--tiny {
+    svg {
+      width: var(--icon-tiny);
+    }
+  }
+
+  &.ck-icon-button--xs {
+    svg {
+      width: var(--icon-xs);
+    }
+  }
+
+  &.ck-icon-button--sm {
+    svg {
+      width: var(--icon-sm);
+    }
+  }
+
+  &.ck-icon-button--md {
+    svg {
+      width: var(--icon-md);
+    }
+  }
+
+  &.ck-icon-button--lg {
+    svg {
+      width: var(--icon-lg);
+    }
+  }
+
+  &.ck-icon-button--xl {
+    svg {
+      width: var(--icon-xl);
+    }
+  }
+
+  // -- Shape ----------
+
+  &.ck-icon-button--square {
+    border-radius: 0;
+  }
+
+  &.ck-icon-button--circle {
+    @include circle;
+  }
+
+  &.ck-icon-button--rounded {
+    border-radius: var(--border-radius-sm);
+
+    &.ck-icon-button--lg {
+      border-radius: var(--border-radius-md);
+    }
+
+    &.ck-icon-button--xl {
+      border-radius: var(--border-radius-lg);
+    }
+  }
+
+  // -- Attention ----------
+
+  &.ck-icon-button--lower {
+    background-color: transparent;
+    border: none;
+  }
+
+  &.ck-icon-button--low {
+
+  }
+
+  &.ck-icon-button--normal {
+    
+  }
+
+  &.ck-icon-button--high {
+
+  }
+
+  &.ck-icon-button--higher {
+    background-color: black;
+    color: white;
+  }
+}
