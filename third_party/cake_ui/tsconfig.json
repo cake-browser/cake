@@ -16,6 +16,7 @@
         "stripInternal": true,
         "allowSyntheticDefaultImports": true,
         "resolveJsonModule": true,
+        "noImplicitAny": false,
         "jsx": "react-jsx"
     }
 }

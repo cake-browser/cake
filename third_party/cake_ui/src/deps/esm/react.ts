@@ -28,6 +28,6 @@ export {
   useTransition,
   createContext,
   createElement,
-}
+};
 
 export default React;
