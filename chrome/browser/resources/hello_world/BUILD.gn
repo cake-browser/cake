@@ -15,4 +15,8 @@ build_webui("build") {
   ]
 
   ts_deps = [ "//third_party/cake_ui:build_ts" ]
+
+  ts_path_mappings = [
+    "resources/cake_ui/ui.rollup.js|../../../../third_party/cake_ui/ui.d.ts"
+  ]
 }

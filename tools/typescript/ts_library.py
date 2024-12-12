@@ -296,7 +296,7 @@ def main(argv):
     # If the target depends on ui, replace the default jsxImportSource with the ui rollup.js file
     depends_on_ui = any('/cake_ui' in p for p in (args.deps or []))
     if depends_on_ui:
-      replacement_jsxImportSource = '//resources/cake_ui/ui.rollup.js'
+      replacement_jsxImportSource = 'resources/cake_ui/ui.rollup.js'
 
       for f in args.in_files:
         [pathname, extension] = os.path.splitext(f)
@@ -308,7 +308,16 @@ def main(argv):
         with open(in_file_path, 'r', encoding='utf-8') as file:
           file_contents = file.read()
           
-        new_contents = file_contents.replace(default_jsxImportSource, replacement_jsxImportSource, -1)
+        new_contents = file_contents.replace(
+          default_jsxImportSource, 
+          replacement_jsxImportSource, 
+          -1,
+        ).replace(
+          replacement_jsxImportSource, 
+          '//' + replacement_jsxImportSource, 
+          -1,
+        )
+
         with open(in_file_path, 'w', encoding='utf-8') as file:
             file.write(new_contents)
 

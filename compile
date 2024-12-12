@@ -1,15 +1,13 @@
 #!/bin/bash
 
-cake_ui_styles="./third_party/cake_ui/src/styles/index.css"
-
 # Blow away Cake UI node modules to prevent conflict.
 if [ -d "./third_party/cake_ui/node_modules" ]; then
   rm -rf ./third_party/cake_ui/node_modules
 fi
 
-# Copy index.css from Cake UI to any relevant web resources if it exists
-if [ -f "$cake_ui_styles" ]; then
-  cp "$cake_ui_styles" ./chrome/browser/resources/cake_new_tab/ui.css
+# Blow away Cake New Tab node modules to prevent conflict.
+if [ -d "./chrome/browser/resources/cake_new_tab/node_modules" ]; then
+  rm -rf ./chrome/browser/resources/cake_new_tab/node_modules
 fi
 
 autoninja -C out/release chrome

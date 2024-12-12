@@ -1,0 +1,23 @@
+node_modules/
+**/node_modules/
+**/dist/
+npm-debug.log*
+.DS_Store
+*.pem
+*.env
+typings/
+*.tsbuildinfo
+.npm
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Main CSS
+src/styles/index.css
+src/styles/index.css.map
+
+# Dev
+src/dev.tsx

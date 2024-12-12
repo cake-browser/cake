@@ -441,10 +441,6 @@ template("build_webui") {
         external_paths = invoker.optimize_webui_external_paths
       }
 
-      # if (defined(invoker.optimize_webui_rollup_config)) {
-      #   rollup_config = invoker.optimize_webui_rollup_config
-      # }
-
       deps = [ ":build_ts" ]
     }
   }

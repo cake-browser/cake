@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from '//resources/cake_ui/ui.rollup.js';
+import { useState, useEffect, useCallback } from 'resources/cake_ui/ui.rollup.js';
 
 const App = () => {
   const [time, setTime] = useState(0); // Time in seconds

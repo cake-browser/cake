@@ -1,0 +1,26 @@
+{
+    "include": ["src"],
+    "exclude": ["node_modules", "dist"],
+    "compilerOptions": {
+        "declaration": true,
+        "declarationMap": true,
+        "module": "ESNext",
+        "target": "ESNext",
+        "outDir": "dist",
+        "rootDir": "src",
+        "sourceMap": true,
+        "strict": true,
+        "esModuleInterop": true,
+        "moduleResolution": "Node",
+        "forceConsistentCasingInFileNames": true,
+        "stripInternal": true,
+        "allowSyntheticDefaultImports": true,
+        "resolveJsonModule": true,
+        "noImplicitAny": false,
+        "jsx": "react-jsx",
+        "baseUrl": ".",
+        "paths": {
+          "resources/cake_ui/ui.rollup.js": ["./src/dev/deps"]
+        }
+    }
+}

@@ -6,16 +6,19 @@ build_webui("build") {
 
   static_files = [
     "index.html",
-    "index.css",
-    "ui.css"
+    "src/styles/index.css",
   ]
 
   non_web_component_files = [
-    "index.tsx",
-    "app.tsx"
+    "src/index.tsx",
+    "src/App.tsx"
   ]
 
   ts_deps = [ 
     "//third_party/cake_ui:build_ts"
+  ]
+
+  ts_path_mappings = [
+    "resources/cake_ui/ui.rollup.js|../../../../third_party/cake_ui/ui.d.ts"
   ]
 }

@@ -1,5 +1,5 @@
-import { React, ReactDOM } from '//resources/cake_ui/ui.rollup.js';
-import App from './app.js';
+import { React, ReactDOM } from 'resources/cake_ui/ui.rollup.js';
+import { App } from './App.js';
 
 // @ts-ignore
 const root = ReactDOM.createRoot(
