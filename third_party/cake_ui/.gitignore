@@ -21,3 +21,6 @@ src/styles/index.css.map
 
 # Dev
 src/dev.tsx
+
+# Dist
+*.tgz
