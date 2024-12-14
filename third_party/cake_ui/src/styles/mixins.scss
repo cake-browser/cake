@@ -45,23 +45,27 @@
     outline: none !important;
     box-shadow: none !important;
     background-color: transparent;
-    color: var(--secondary-color);
+    color: rgba(var(--secondary-rgb), 0.88);
     font-size: var(--font-size-sm);
     line-height: var(--line-height-sm);
     text-align: left;
     font-family: Regular;
     
     &::placeholder {
-      color: rgba(var(--tertiary-rgb), 0.21);
+      color: rgba(var(--tertiary-rgb), 0.16);
     }
 
     &::-webkit-input-placeholder {
-      color: rgba(var(--tertiary-rgb), 0.21);
+      color: rgba(var(--tertiary-rgb), 0.16);
     }
 
     &::-moz-placeholder {
-      color: rgba(var(--tertiary-rgb), 0.21);
+      color: rgba(var(--tertiary-rgb), 0.16);
     }
+  }
+
+  input {
+    caret-color: var(--secondary-color);
   }
 
   &.--xs {

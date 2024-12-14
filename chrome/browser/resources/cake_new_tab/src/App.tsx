@@ -5,7 +5,6 @@ import {
   ThemeProvider, 
   ThemeContext,
 } from 'resources/cake_ui/ui.rollup.js';
-import { Card } from './components/Card.js';
 
 const Content = () => {
   const { theme } = useContext(ThemeContext);
@@ -18,7 +17,6 @@ const Content = () => {
   return (
     <div>
       <h1>Hello Ben!</h1>
-      <Card />
     </div>
   );
 };

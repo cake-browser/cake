@@ -292,6 +292,9 @@ void CaretDisplayItemClient::PaintCaret(
   PhysicalRect drawing_rect = local_rect_;
   drawing_rect.Move(paint_offset);
 
+  // Set caret width to 4px.
+  drawing_rect.SetWidth(LayoutUnit(4));
+
   // When caret is in text-combine box with scaling, |context| is already
   // associated to drawing record to apply affine transform.
   std::optional<DrawingRecorder> recorder;
@@ -304,6 +307,10 @@ void CaretDisplayItemClient::PaintCaret(
   }
 
   gfx::Rect paint_rect = ToPixelSnappedRect(drawing_rect);
+
+  paint_rect.set_height(paint_rect.height() + 8);
+  paint_rect.set_y(paint_rect.y() - 4);
+
   context.FillRect(paint_rect, color_,
                    PaintAutoDarkMode(layout_block_->StyleRef(),
                                      DarkModeFilter::ElementRole::kForeground));
