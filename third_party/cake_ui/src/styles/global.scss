@@ -2,21 +2,17 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: Regular;
 }
 
-// -- Variables ----------
-
 :root {
-  // Fonts:
-  --font-family: 'Inter', sans-serif;
-
   // Spacing:
   --spacing-xs: 2px;
   --spacing-sm: 4px;
   --spacing-md: 6px;
   --spacing-lg: 10px;
 
-  // Icon Sizes:
+  // Icon Size:
   --icon-tiny: 12px;
   --icon-xs: 14px;
   --icon-sm: 16px;
@@ -30,50 +26,32 @@
   --border-radius-lg: 8px;
   --border-radius-round: 50%;
 
-  // Colors:
+  // Font Size:
+  --font-size-xs: 11px;
+  --font-size-sm: 14px;
+  --font-size-md: 16.5px;
+  --font-size-lg: 32px;
+  --font-size-xl: 48px;
+
+  // Line Height:
+  --line-height-offset: 4px;
+  --line-height-xs: calc(var(--font-size-xs) + var(--line-height-offset));
+  --line-height-sm: calc(var(--font-size-sm) + var(--line-height-offset));
+  --line-height-md: calc(var(--font-size-md) + var(--line-height-offset));
+  --line-height-lg: calc(var(--font-size-lg) + var(--line-height-offset));
+  --line-height-xl: calc(var(--font-size-xl) + var(--line-height-offset));
+
+  // Black:
   --color-black: #000000;
   --rgb-black: 0, 0, 0;
 
+  // White:
   --color-white: #FFFFFF;
   --rgb-white: 255, 255, 255;
 
+  // Gray:
   --color-slate-gray: #37352F;
   --rgb-slate-gray: 55, 53, 47;
-
   --color-lightest-gray: #efefef;
   --rgb-lightest-gray: 239, 239, 239;
-}
-
-// -- Mixins ----------
-
-@mixin container {
-  display: block;
-  width: 100%;
-  height: 100%;
-}
-
-@mixin flex-container {
-  display: flex;
-  width: 100%;
-  height: 100%;
-  align-items: center;
-  justify-content: center;
-}
-
-@mixin iflex-container {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-@mixin circle {
-  border-radius: var(--border-radius-round);
-}
-
-@mixin button {
-  box-shadow: none !important;
-  outline: none !important;
-  border: 1px solid transparent;
-  background-color: transparent;
-  position: relative;
 }

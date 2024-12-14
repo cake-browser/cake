@@ -1,0 +1,7 @@
+.ck-text-input {
+  @include input-container;
+
+  input {
+    caret-color: var(--secondary-color);
+  }
+}

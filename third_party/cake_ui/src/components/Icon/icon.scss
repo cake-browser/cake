@@ -1,6 +1,7 @@
 .ck-icon {
   @include iflex-container;
   @include button;
+  flex-shrink: 0;
 
   svg {
     display: inline-block;
