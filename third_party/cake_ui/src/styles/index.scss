@@ -2,5 +2,9 @@
 @import './global.scss';
 @import './themes.scss';
 
+body {
+  background-color: var(--primary-color);
+}
+
 // Components
 @import '../components/IconButton/icon-button.scss';
