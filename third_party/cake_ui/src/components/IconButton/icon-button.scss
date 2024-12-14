@@ -3,7 +3,7 @@
   padding: var(--spacing-md);
   box-shadow: none !important;
   outline: none !important;
-  border: none;
+  border: 1px solid transparent;
   background-color: transparent;
 
   svg {
@@ -79,17 +79,17 @@
   }
 
   &.ck-icon-button--low {
-    border: 1px solid rgba(var(--tertiary-rgb), 0.1);
+    border-color: var(--outline-faint);
     color: var(--secondary-color);
   }
 
   &.ck-icon-button--moderate {
-    background-color: rgba(var(--tertiary-rgb), 0.05);
+    background-color: var(--background-faint);
     color: var(--tertiary-color);
   }
 
   &.ck-icon-button--high {
-    border: 1px solid var(--secondary-color);
+    border-color: var(--outline-strong);
     color: var(--secondary-color);
   }
 

@@ -19,6 +19,10 @@
 
   --accent-overlay-color: var(--color-white);
   --accent-overlay-rgb: var(--rgb-white);
+
+  --background-faint: rgba(var(--tertiary-rgb), 0.05);
+  --outline-faint: rgba(var(--tertiary-rgb), 0.08);
+  --outline-strong: var(--secondary-color);
 }
 
 // -- Grayscale Dark ----------
@@ -40,4 +44,8 @@
 
   --accent-overlay-color: var(--color-black);
   --accent-overlay-rgb: var(--rgb-black);
+
+  --background-faint: rgba(var(--tertiary-rgb), 0.08);
+  --outline-faint: rgba(var(--tertiary-rgb), 0.1);
+  --outline-strong: rgba(var(--secondary-rgb), 0.9);
 }
