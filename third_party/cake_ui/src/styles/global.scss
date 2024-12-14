@@ -4,7 +4,6 @@
   box-sizing: border-box;
 }
 
-
 // -- Variables ----------
 
 :root {
@@ -30,6 +29,19 @@
   --border-radius-md: 6px;
   --border-radius-lg: 8px;
   --border-radius-round: 50%;
+
+  // Colors:
+  --color-black: #000000;
+  --rgb-black: 0, 0, 0;
+  
+  --color-white: #FFFFFF;
+  --rgb-white: 255, 255, 255;
+
+  --color-slate-gray: #37352F;
+  --rgb-slate-gray: 55, 53, 47;
+
+  --color-lightest-gray: #efefef;
+  --rgb-lightest-gray: 239, 239, 239;
 }
 
 // -- Mixins ----------

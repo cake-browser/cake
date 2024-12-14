@@ -6,7 +6,7 @@ const baseClass = 'ck-icon-button';
 
 export type IconButtonSize = 'tiny' |'xs' | 'sm' | 'md' | 'lg' | 'xl';
 
-export type IconButtonAttention = 'lower' | 'low' | 'normal' | 'high' | 'higher';
+export type IconButtonAttention = 'lowest' | 'low' | 'moderate' | 'high' | 'highest';
 
 export type IconButtonShape = 'square' | 'rounded' | 'circle';
 
@@ -22,7 +22,7 @@ export const IconButton = ({
   className,
   size = 'sm',
   shape = 'circle',
-  attention = 'normal',
+  attention = 'moderate',
   tabIndex = -1,
   ...props
 }: IconButtonProps) => {

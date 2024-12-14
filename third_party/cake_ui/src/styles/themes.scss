@@ -3,15 +3,41 @@
 
 :root,
 [data-theme="grayscale-light"] {
-  --background-color: white;
-  --text-color: black;
   --color-scheme: light;
+
+  --primary-color: var(--color-white);
+  --primary-rgb: var(--rgb-white);
+
+  --secondary-color: var(--color-black);
+  --secondary-rgb: var(--rgb-black);
+
+  --tertiary-color: var(--color-slate-gray);
+  --tertiary-rgb: var(--rgb-slate-gray);
+
+  --accent-color: var(--color-black);
+  --accent-rgb: var(--rgb-black);
+
+  --accent-overlay-color: var(--color-white);
+  --accent-overlay-rgb: var(--rgb-white);
 }
 
 // -- Grayscale Dark ----------
 
 [data-theme="grayscale-dark"] {
-  --background-color: black;
-  --text-color: white;
   --color-scheme: dark;
+
+  --primary-color: var(--color-black);
+  --primary-rgb: var(--rgb-black);
+
+  --secondary-color: var(--color-white);
+  --secondary-rgb: var(--rgb-white);
+
+  --tertiary-color: var(--color-lightest-gray);
+  --tertiary-rgb: var(--rgb-lightest-gray);
+
+  --accent-color: var(--color-white);
+  --accent-rgb: var(--rgb-white);
+
+  --accent-overlay-color: var(--color-black);
+  --accent-overlay-rgb: var(--rgb-black);
 }

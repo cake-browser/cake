@@ -4,6 +4,7 @@
   box-shadow: none !important;
   outline: none !important;
   border: none;
+  background-color: transparent;
 
   svg {
     display: inline-block;
@@ -73,25 +74,27 @@
 
   // -- Attention ----------
 
-  &.ck-icon-button--lower {
-    background-color: transparent;
-    border: none;
+  &.ck-icon-button--lowest {
+    color: rgba(var(--tertiary-rgb), 0.5);
   }
 
   &.ck-icon-button--low {
-
+    border: 1px solid rgba(var(--tertiary-rgb), 0.1);
+    color: var(--secondary-color);
   }
 
-  &.ck-icon-button--normal {
-    
+  &.ck-icon-button--moderate {
+    background-color: rgba(var(--tertiary-rgb), 0.05);
+    color: var(--tertiary-color);
   }
 
   &.ck-icon-button--high {
-
+    border: 1px solid var(--secondary-color);
+    color: var(--secondary-color);
   }
 
-  &.ck-icon-button--higher {
-    background-color: black;
-    color: white;
+  &.ck-icon-button--highest {
+    background-color: var(--accent-color);
+    color: var(--accent-overlay-color);
   }
 }
