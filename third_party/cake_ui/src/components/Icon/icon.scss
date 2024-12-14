@@ -1,0 +1,118 @@
+.ck-icon {
+  @include iflex-container;
+  @include button;
+
+  svg {
+    display: inline-block;
+    height: auto;
+    stroke: currentColor;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  // -- Size ----------
+
+  &.ck-icon--tiny {
+    width: calc(var(--icon-tiny) + (2 *var(--spacing-md)));
+    height: calc(var(--icon-tiny) + (2 *var(--spacing-md)));
+
+    svg {
+      width: var(--icon-tiny);
+    }
+  }
+
+  &.ck-icon--xs {
+    width: calc(var(--icon-xs) + (2 *var(--spacing-md)));
+    height: calc(var(--icon-xs) + (2 *var(--spacing-md)));
+
+    svg {
+      width: var(--icon-xs);
+    }
+  }
+
+  &.ck-icon--sm {
+    width: calc(var(--icon-sm) + (2 *var(--spacing-md)));
+    height: calc(var(--icon-sm) + (2 *var(--spacing-md)));
+
+    svg {
+      width: var(--icon-sm);
+    }
+  }
+
+  &.ck-icon--md {
+    width: calc(var(--icon-md) + (2 *var(--spacing-md)));
+    height: calc(var(--icon-md) + (2 *var(--spacing-md)));
+
+    svg {
+      width: var(--icon-md);
+    }
+  }
+
+  &.ck-icon--lg {
+    width: calc(var(--icon-lg) + (2 *var(--spacing-md)));
+    height: calc(var(--icon-lg) + (2 *var(--spacing-md)));
+
+    svg {
+      width: var(--icon-lg);
+    }
+  }
+
+  &.ck-icon--xl {
+    width: calc(var(--icon-xl) + (2 *var(--spacing-md)));
+    height: calc(var(--icon-xl) + (2 *var(--spacing-md)));
+
+    svg {
+      width: var(--icon-xl);
+    }
+  }
+
+  // -- Shape ----------
+
+  &.ck-icon--square {
+    border-radius: 0;
+  }
+
+  &.ck-icon--circle {
+    @include circle;
+  }
+
+  &.ck-icon--rounded {
+    border-radius: var(--border-radius-sm);
+
+    &.ck-icon--lg {
+      border-radius: var(--border-radius-md);
+    }
+
+    &.ck-icon--xl {
+      border-radius: var(--border-radius-lg);
+    }
+  }
+
+  // -- Attention ----------
+
+  &.ck-icon--lowest {
+    color: rgba(var(--tertiary-rgb), 0.5);
+  }
+
+  &.ck-icon--low {
+    border-color: var(--outline-faint);
+    color: var(--secondary-color);
+  }
+
+  &.ck-icon--moderate {
+    background-color: var(--background-faint);
+    color: var(--tertiary-color);
+  }
+
+  &.ck-icon--high {
+    border-color: var(--outline-strong);
+    color: var(--secondary-color);
+  }
+
+  &.ck-icon--highest {
+    background-color: var(--accent-color);
+    color: var(--accent-overlay-color);
+  }
+}

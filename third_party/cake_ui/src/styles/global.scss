@@ -33,7 +33,7 @@
   // Colors:
   --color-black: #000000;
   --rgb-black: 0, 0, 0;
-  
+
   --color-white: #FFFFFF;
   --rgb-white: 255, 255, 255;
 
@@ -68,4 +68,12 @@
 
 @mixin circle {
   border-radius: var(--border-radius-round);
+}
+
+@mixin button {
+  box-shadow: none !important;
+  outline: none !important;
+  border: 1px solid transparent;
+  background-color: transparent;
+  position: relative;
 }

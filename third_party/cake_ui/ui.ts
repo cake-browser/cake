@@ -1,4 +1,4 @@
-export * from './src/components/IconButton';
+export * from './src/components/Icon';
 export * from './src/providers/ThemeProvider';
 export {
   React,

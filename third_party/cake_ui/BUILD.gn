@@ -20,9 +20,9 @@ ts_library("build_ts") {
     "src/providers/ThemeProvider/index.ts",
     "src/providers/ThemeProvider/ThemeProvider.tsx",
     "src/providers/ThemeProvider/themes.ts",
-    "src/components/IconButton/index.ts",
-    "src/components/IconButton/icons.ts",
-    "src/components/IconButton/IconButton.tsx",
+    "src/components/Icon/index.ts",
+    "src/components/Icon/icons.ts",
+    "src/components/Icon/Icon.tsx",
   ]
 
   node_modules = "//third_party/node/node_modules"

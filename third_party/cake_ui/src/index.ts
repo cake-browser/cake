@@ -1,3 +1,3 @@
-export * from './components/IconButton';
+export * from './components/Icon';
 export * from './providers/ThemeProvider';
 
