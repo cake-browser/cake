@@ -22,7 +22,7 @@ $omnibar-min-height: 26px;
       }
 
       &:after {
-        left: 160px;
+        left: 100%;
       }
     }
   }
@@ -43,24 +43,24 @@ $omnibar-min-height: 26px;
   .ck-icon {
     transform-origin: center center;
     transform: scale(0);
-    transition: transform 0.4s cubic-bezier(.28,.35,.35,1);
+    transition: transform 0.354s cubic-bezier(.28,.35,.35,1);
 
     svg {
       opacity: 0;
-      transition: opacity 0.4s cubic-bezier(.28,.35,.35,1);
+      transition: opacity 0.354s cubic-bezier(.28,.35,.35,1);
     }
   }
 
   .ck-text-input {
     margin-left: 14px;
     opacity: 0;
-    transition: opacity 0.4s cubic-bezier(.28,.35,.35,1) 5ms;
+    transition: opacity 0.43s cubic-bezier(.28,.35,.35,1) 5ms;
     position: relative;
     z-index: 0;
 
     input {
       caret-color: transparent;
-      transition: caret-color 0s cubic-bezier(.28,.35,.35,1) 0.5s;
+      transition: caret-color 0.5s cubic-bezier(.28,.35,.35,1);
     }
     
     &:after {
@@ -72,7 +72,7 @@ $omnibar-min-height: 26px;
       right: 0;
       background-image: linear-gradient(to right, transparent 0, var(--primary-color) 40px);
       z-index: 1;
-      transition: left 0.535s cubic-bezier(.28,.35,.35,1) 5ms;
+      transition: left 0.73s cubic-bezier(.28,.35,.35,1);
     }
   }
 }

@@ -1,4 +1,33 @@
 import("//ui/webui/resources/tools/build_webui.gni")
+import("//ui/webui/resources/tools/generate_grd.gni")
+
+fonts = [
+  "src/styles/fonts/Inter-Bold.ttf",
+  "src/styles/fonts/Inter-Medium.ttf",
+  "src/styles/fonts/Inter-Regular.ttf",
+  "src/styles/fonts/Inter-SemiBold.ttf"
+]
+
+copy("copy_fonts") {
+  sources = fonts
+  outputs = [ "$target_gen_dir/preprocessed/{{source_target_relative}}" ]
+}
+
+fonts_grdp_file = "$target_gen_dir/fonts.grdp"
+preprocess_folder = "$target_gen_dir/preprocessed"
+
+generate_grd("build_fonts_grdp") {
+  grd_prefix = "fonts"
+  deps = [
+    ":copy_fonts",
+  ]
+  input_files_base_dir = rebase_path(preprocess_folder, root_build_dir)
+  input_files = []
+  foreach(file, fonts) {
+    input_files += [ "$file" ]
+  }
+  out_grd = fonts_grdp_file
+}
 
 build_webui("build") {
   grd_prefix = "cake_new_tab"
@@ -10,8 +39,14 @@ build_webui("build") {
   ]
 
   non_web_component_files = [
+    "src/utils/cn.ts",
+    "src/components/Omnibar/Omnibar.tsx",
+    "src/components/Omnibar/index.ts",
+    "src/pages/types.ts",
+    "src/pages/EntryPage.tsx",
+    "src/pages/PageManager.tsx",
+    "src/App.tsx",
     "src/index.tsx",
-    "src/App.tsx"
   ]
 
   ts_deps = [ 
@@ -20,5 +55,13 @@ build_webui("build") {
 
   ts_path_mappings = [
     "resources/cake_ui/ui.rollup.js|../../../../third_party/cake_ui/ui.d.ts"
+  ]
+
+  extra_grdp_deps = [
+    ":build_fonts_grdp",
+  ]
+
+  extra_grdp_files = [
+    fonts_grdp_file,
   ]
 }

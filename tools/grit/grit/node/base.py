@@ -32,7 +32,7 @@ class Node:
 
   # Types of files to disallow compressing, as it provides no benefit, and can
   # potentially even make the file larger.
-  _COMPRESS_DISALLOWED_EXTENSIONS = ('.png', '.jpg')
+  _COMPRESS_DISALLOWED_EXTENSIONS = ('.png', '.jpg', '.ttf')
 
   # Default nodes to not allowlist skipped
   _allowlist_marked_as_skip = False

@@ -135,6 +135,9 @@ def main(argv):
       if os.path.exists(to_check):
         os.remove(to_check)
 
+    if '/src/styles/index.css' in out_path:
+      preprocessed = preprocessed.replace('~', '', -1)
+
     with open(out_path, mode='wb') as f:
       f.write(preprocessed.encode('utf-8'))
 

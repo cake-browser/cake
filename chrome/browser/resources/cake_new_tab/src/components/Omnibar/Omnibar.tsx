@@ -25,7 +25,7 @@ export const Omnibar = () => {
     <div className={classes}>
       <div className={pcn('__input-bar')}>
         <Icon icon='search' size='xs' attention='highest' />
-        <TextInput size="md" placeholder='Explore, learn, create...' ref={inputRef} />
+        <TextInput size="md" placeholder='Explore, learn, or do something magical...' ref={inputRef} />
       </div>
     </div>
   );
