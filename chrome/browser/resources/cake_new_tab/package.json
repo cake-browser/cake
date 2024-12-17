@@ -8,7 +8,7 @@
         "sass": "nodemon --watch src -e scss -x 'sass --no-source-map src/styles/index.scss:src/styles/index.css'"
     },
     "dependencies": {
-        "@cake.dev/ui": "file:../../../../third_party/cake_ui/cake.dev-ui-0.0.7.tgz",
+        "@cake.dev/ui": "file:../../../../third_party/cake_ui/cake.dev-ui-0.0.8.tgz",
         "@craco/craco": "7.1.0",
         "cra-template-typescript": "1.2.0",
         "react": "^18.3.1",

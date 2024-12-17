@@ -1,4 +1,12 @@
-import { React, useState, useRef, useImperativeHandle, useEffect, useCallback, forwardRef } from '../../deps/react';
+import {
+  React,
+  useState,
+  useRef,
+  useImperativeHandle,
+  useEffect,
+  useCallback,
+  forwardRef,
+} from '../../deps/react';
 import { cn } from '../../utils/cn';
 import { key } from '../../utils/keyboard';
 
@@ -29,14 +37,14 @@ export type TextInputProps = {
   updateFromAbove?: boolean;
   validateWhenValueExists?: boolean;
   renderAfter?: (value: string) => React.ReactNode;
-}
+};
 
 export type TextInputHandle = {
   focus: () => void;
   blur: () => void;
   getValue: () => string;
   validate: () => boolean;
-}
+};
 
 export const TextInput = forwardRef<TextInputHandle, TextInputProps>((props, ref) => {
   // Props
@@ -84,59 +92,71 @@ export const TextInput = forwardRef<TextInputHandle, TextInputProps>((props, ref
   }));
 
   // Validate input value on some type of "submission".
-  const validate = useCallback((updateState = true) => {
-    const performValidation = () => {
-      const isValid = validator(data.value);
+  const validate = useCallback(
+    (updateState = true) => {
+      const performValidation = () => {
+        const isValid = validator(data.value);
 
-      if (updateState && isValid !== data.isValid) {
-        setData((prevState) => ({ ...prevState, isValid }));
+        if (updateState && isValid !== data.isValid) {
+          setData((prevState) => ({ ...prevState, isValid }));
+        }
+
+        return isValid;
+      };
+
+      if (isRequired) {
+        return performValidation();
       }
 
-      return isValid;
-    };
+      if (validateWhenValueExists) {
+        return data.value ? performValidation() : true;
+      }
 
-    if (isRequired) {
-      return performValidation();
-    }
-
-    if (validateWhenValueExists) {
-      return data.value ? performValidation() : true;
-    }
-
-    return true;
-  }, [data.value, data.isValid, validator, isRequired, validateWhenValueExists]);
+      return true;
+    },
+    [data.value, data.isValid, validator, isRequired, validateWhenValueExists]
+  );
 
   // -- Event handlers -------------
 
-  const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = sanitizer(e.currentTarget.value, lastKey.current);
-    setData({ value, isValid: true });
-    onChange(value);
-  }, [sanitizer, onChange]);
+  const handleChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const value = sanitizer(e.currentTarget.value, lastKey.current);
+      setData({ value, isValid: true });
+      onChange(value);
+    },
+    [sanitizer, onChange]
+  );
 
-  const onKeyDown = useCallback((e: React.KeyboardEvent<HTMLInputElement>) => {
-    lastKey.current = e.key;
+  const onKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLInputElement>) => {
+      lastKey.current = e.key;
 
-    switch (lastKey.current) {
-      case key.ESCAPE:
-        onEsc();
-        break;
-      case key.ARROW_UP:
-        onArrowUp();
-        break;
-      case key.ARROW_DOWN:
-        onArrowDown();
-        break;
-      default:
-        break;
-    }
-  }, [onEsc, onArrowUp, onArrowDown]);
+      switch (lastKey.current) {
+        case key.ESCAPE:
+          onEsc();
+          break;
+        case key.ARROW_UP:
+          onArrowUp();
+          break;
+        case key.ARROW_DOWN:
+          onArrowDown();
+          break;
+        default:
+          break;
+      }
+    },
+    [onEsc, onArrowUp, onArrowDown]
+  );
 
-  const onKeyUp = useCallback((e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (lastKey.current === key.ENTER) {
-      onEnter();
-    }
-  }, [onEnter]);
+  const onKeyUp = useCallback(
+    (e: React.KeyboardEvent<HTMLInputElement>) => {
+      if (lastKey.current === key.ENTER) {
+        onEnter();
+      }
+    },
+    [onEnter]
+  );
 
   // -- Effects -------------
 
@@ -157,7 +177,7 @@ export const TextInput = forwardRef<TextInputHandle, TextInputProps>((props, ref
     disabled ? `${baseClass}--disabled` : '',
     formattedValue ? `${baseClass}--has-value` : '',
     isRequired ? `${baseClass}--required` : '',
-    className,
+    className
   );
 
   const useValue = formattedValue === null ? '' : formattedValue;

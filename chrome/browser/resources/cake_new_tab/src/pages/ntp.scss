@@ -1,0 +1,8 @@
+.ntp-container {
+  @include container;
+}
+
+.ntp {
+  @include container;
+  position: relative;
+}

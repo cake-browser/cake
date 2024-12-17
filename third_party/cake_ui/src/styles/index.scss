@@ -4,10 +4,6 @@
 @import './themes.scss';
 @import './mixins.scss';
 
-body {
-  background-color: var(--primary-color);
-}
-
 // Components
 @import '../components/Icon/icon.scss';
 @import '../components/TextInput/text-input.scss';

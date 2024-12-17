@@ -7,4 +7,4 @@ export const key: Record<string, string> = {
   BACKSPACE: 'Backspace',
   ESCAPE: 'Escape',
   J: 'j',
-}
+};

@@ -1,5 +1,12 @@
 // Cake UI
 @import '../../../../../../third_party/cake_ui/src/styles/index.scss';
+@import '../../../../../../third_party/cake_ui/src/styles/mixins.scss';
 
 // Root
 @import './global.scss';
+
+// Pages
+@import '../pages/ntp.scss';
+
+// Components
+@import '../components/Omnibar/omnibar.scss';

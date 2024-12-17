@@ -4,7 +4,7 @@ import { React } from '../../deps/react';
 
 const baseClass = 'ck-icon';
 
-export type IconSize = 'tiny' |'xs' | 'sm' | 'md' | 'lg' | 'xl';
+export type IconSize = 'tiny' | 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 
 export type IconAttention = 'lowest' | 'low' | 'moderate' | 'high' | 'highest';
 
@@ -30,7 +30,7 @@ export const Icon = ({
   ...props
 }: IconProps) => {
   if (!options.length) {
-    options.push(icon)
+    options.push(icon);
   }
 
   const classes = cn(
@@ -40,7 +40,7 @@ export const Icon = ({
     `${baseClass}--${shape}`,
     `${baseClass}--${attention}`,
     className ? className : '',
-    className ? `${className}--${icon}` : '',
+    className ? `${className}--${icon}` : ''
   );
 
   style.cursor = props.onClick ? 'pointer' : 'default';
