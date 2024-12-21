@@ -166,6 +166,8 @@ static_library("ui") {
     "webui/browsing_topics/browsing_topics_internals_page_handler.h",
     "webui/browsing_topics/browsing_topics_internals_ui.cc",
     "webui/browsing_topics/browsing_topics_internals_ui.h",
+    "webui/cake_new_tab/cake_new_tab_page_handler.cc",
+    "webui/cake_new_tab/cake_new_tab_page_handler.h",
     "webui/cake_new_tab/cake_new_tab_ui.cc",
     "webui/cake_new_tab/cake_new_tab_ui.h",
     "webui/chrome_web_ui_controller_factory.cc",

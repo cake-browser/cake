@@ -54,7 +54,7 @@ $omnibar-min-height: 26px;
   .ck-text-input {
     margin-left: 14px;
     opacity: 0;
-    transition: opacity 0.4s cubic-bezier(.28,.35,.35,1) 5ms;
+    transition: opacity 0.42s cubic-bezier(.28,.35,.35,1) 5ms;
     position: relative;
     z-index: 0;
 
@@ -72,7 +72,7 @@ $omnibar-min-height: 26px;
       right: 0;
       background-image: linear-gradient(to right, transparent 0, var(--primary-color) 40px);
       z-index: 1;
-      transition: left 1.2s cubic-bezier(.28,.35,.35,1);
+      transition: left 0.965s cubic-bezier(.28,.35,.35,1);
     }
   }
 }

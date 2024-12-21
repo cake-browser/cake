@@ -38,6 +38,8 @@
 #include "chrome/browser/ui/ui_features.h"
 #include "chrome/browser/ui/views/side_panel/companion/companion_utils.h"
 #include "chrome/browser/ui/webui/browsing_topics/browsing_topics_internals_ui.h"
+#include "chrome/browser/ui/webui/cake_new_tab/cake_new_tab.mojom.h"
+#include "chrome/browser/ui/webui/cake_new_tab/cake_new_tab_ui.h"
 #include "chrome/browser/ui/webui/data_sharing_internals/data_sharing_internals_ui.h"
 #include "chrome/browser/ui/webui/engagement/site_engagement_ui.h"
 #include "chrome/browser/ui/webui/internals/internals_ui.h"
@@ -1145,6 +1147,9 @@ void PopulateChromeWebUIFrameBinders(
 
   RegisterWebUIControllerInterfaceBinder<::mojom::OmniboxPageHandler,
                                          OmniboxUI>(map);
+
+  RegisterWebUIControllerInterfaceBinder<cake_new_tab::mojom::CakeNewTabPageHandler,
+                                         CakeNewTabUI>(map);
 
   RegisterWebUIControllerInterfaceBinder<
       site_engagement::mojom::SiteEngagementDetailsProvider, SiteEngagementUI>(

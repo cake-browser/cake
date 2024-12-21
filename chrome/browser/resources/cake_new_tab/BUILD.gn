@@ -39,6 +39,7 @@ build_webui("build") {
   ]
 
   non_web_component_files = [
+    "src/proxy.ts",
     "src/utils/cn.ts",
     "src/components/Omnibar/Omnibar.tsx",
     "src/components/Omnibar/index.ts",
@@ -49,8 +50,17 @@ build_webui("build") {
     "src/index.tsx",
   ]
 
+  mojo_files_deps = [
+    "//chrome/browser/ui/webui/cake_new_tab:mojo_bindings_ts__generator",
+  ]
+
+  mojo_files = [
+    "$root_gen_dir/chrome/browser/ui/webui/cake_new_tab/cake_new_tab.mojom-webui.ts",
+  ]
+
   ts_deps = [ 
-    "//third_party/cake_ui:build_ts"
+    "//third_party/cake_ui:build_ts",
+    "//ui/webui/resources/mojo:build_ts",
   ]
 
   ts_path_mappings = [

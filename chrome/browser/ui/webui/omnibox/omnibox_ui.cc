@@ -32,6 +32,7 @@
 
 OmniboxUI::OmniboxUI(content::WebUI* web_ui)
     : ui::MojoWebUIController(web_ui, /*enable_chrome_send=*/true) {
+
   // Set up the chrome://omnibox/ source.
   content::WebUIDataSource* source = content::WebUIDataSource::CreateAndAdd(
       Profile::FromWebUI(web_ui), chrome::kChromeUIOmniboxHost);
