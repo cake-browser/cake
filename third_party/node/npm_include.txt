@@ -1,3 +1,8 @@
+@lexical/react/
+@lexical/react/*.d.ts
+@lexical/react/shared/*.d.ts
+@lexical/history/
+@lexical/history/*.d.ts
 @mediapipe/tasks-vision/wasm/vision_wasm_internal.js
 @mediapipe/tasks-vision/vision.d.ts
 @mediapipe/tasks-vision/vision_bundle.mjs
@@ -58,3 +63,5 @@
 /typescript/lib/tsc.js
 /typescript/lib/tsserver.js
 /typescript/lib/typescript.js
+lexical/*.d.ts
+lexical/**/*.d.ts

@@ -26,6 +26,8 @@ ts_library("build_ts") {
     "src/components/Icon/index.ts",
     "src/components/TextInput/TextInput.tsx",
     "src/components/TextInput/index.ts",
+    "src/components/ChatInput/ChatInput.tsx",
+    "src/components/ChatInput/index.ts",
   ]
 
   node_modules = "//third_party/node/node_modules"
@@ -36,6 +38,38 @@ ts_library("build_ts") {
     "${node_modules}/@types/react/index.d.ts",
     "${node_modules}/@types/react-dom/index.d.ts",
     "${node_modules}/@tabler/icons-react/dist/tabler-icons-react.d.ts",
+    "${node_modules}/lexical/LexicalCommands.d.ts",
+    "${node_modules}/lexical/LexicalConstants.d.ts",
+    "${node_modules}/lexical/LexicalEditor.d.ts",
+    "${node_modules}/lexical/LexicalEditorState.d.ts",
+    "${node_modules}/lexical/LexicalEvents.d.ts",
+    "${node_modules}/lexical/LexicalGC.d.ts",
+    "${node_modules}/lexical/LexicalMutations.d.ts",
+    "${node_modules}/lexical/LexicalNode.d.ts",
+    "${node_modules}/lexical/LexicalNormalization.d.ts",
+    "${node_modules}/lexical/LexicalReconciler.d.ts",
+    "${node_modules}/lexical/LexicalSelection.d.ts",
+    "${node_modules}/lexical/LexicalUpdates.d.ts",
+    "${node_modules}/lexical/LexicalUtils.d.ts",
+    "${node_modules}/lexical/nodes/ArtificialNode.d.ts",
+    "${node_modules}/lexical/nodes/LexicalDecoratorNode.d.ts",
+    "${node_modules}/lexical/nodes/LexicalElementNode.d.ts",
+    "${node_modules}/lexical/nodes/LexicalLineBreakNode.d.ts",
+    "${node_modules}/lexical/nodes/LexicalParagraphNode.d.ts",
+    "${node_modules}/lexical/nodes/LexicalRootNode.d.ts",
+    "${node_modules}/lexical/nodes/LexicalTabNode.d.ts",
+    "${node_modules}/lexical/nodes/LexicalTextNode.d.ts",
+    "${node_modules}/lexical/index.d.ts",
+    "${node_modules}/@lexical/react/LexicalAutoFocusPlugin.d.ts",
+    "${node_modules}/@lexical/react/LexicalComposer.d.ts",
+    "${node_modules}/@lexical/react/LexicalComposerContext.d.ts",
+    "${node_modules}/@lexical/react/LexicalPlainTextPlugin.d.ts",
+    "${node_modules}/@lexical/react/LexicalContentEditable.d.ts",
+    "${node_modules}/@lexical/react/LexicalHistoryPlugin.d.ts",
+    "${node_modules}/@lexical/react/LexicalErrorBoundary.d.ts",
+    "${node_modules}/@lexical/react/shared/useDecorators.d.ts",
+    "${node_modules}/@lexical/react/shared/LexicalContentEditableElement.d.ts",
+    "${node_modules}/@lexical/history/index.d.ts",
   ]
 
   path_mappings = [
@@ -49,6 +83,24 @@ ts_library("build_ts") {
         rebase_path("${node_modules}/@types/react-dom/index.d.ts", target_gen_dir),
     "@tabler/icons-react|" +
         rebase_path("${node_modules}/@tabler/icons-react/dist/tabler-icons-react.d.ts", target_gen_dir),
+    "lexical|" +
+        rebase_path("${node_modules}/lexical/index.d.ts", target_gen_dir),
+    "@lexical/react/LexicalAutoFocusPlugin|" +
+        rebase_path("${node_modules}/@lexical/react/LexicalAutoFocusPlugin.d.ts", target_gen_dir),
+    "@lexical/react/LexicalComposer|" +
+        rebase_path("${node_modules}/@lexical/react/LexicalComposer.d.ts", target_gen_dir),
+    "@lexical/react/LexicalComposerContext|" +
+        rebase_path("${node_modules}/@lexical/react/LexicalComposerContext.d.ts", target_gen_dir),
+    "@lexical/react/LexicalPlainTextPlugin|" +
+        rebase_path("${node_modules}/@lexical/react/LexicalPlainTextPlugin.d.ts", target_gen_dir),
+    "@lexical/react/LexicalContentEditable|" +
+        rebase_path("${node_modules}/@lexical/react/LexicalContentEditable.d.ts", target_gen_dir),
+    "@lexical/react/LexicalHistoryPlugin|" +
+        rebase_path("${node_modules}/@lexical/react/LexicalHistoryPlugin.d.ts", target_gen_dir),
+    "@lexical/react/LexicalErrorBoundary|" +
+        rebase_path("${node_modules}/@lexical/react/LexicalErrorBoundary.d.ts", target_gen_dir),
+    "@lexical/history|" +
+        rebase_path("${node_modules}/@lexical/history/index.d.ts", target_gen_dir),
   ]
 }
 

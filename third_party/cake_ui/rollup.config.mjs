@@ -33,18 +33,24 @@ function plugin() {
 
   // URL mappings from bare import URLs to file paths.
   const redirects = new Map([
-    // Custom UMD->ESM mappings
+    // Custom local UMD->ESM mappings.
     ['react', path.join(hereDir, 'src/deps/esm/react.ts')],
     ['react-dom', path.join(hereDir, 'src/deps/esm/react-dom.ts')],
     ['prop-types', path.join(hereDir, 'src/deps/esm/prop-types.ts')],
 
-    // Native UMD
+    // Mappings to third_party/node/node_modules files.
     ['react/index.js', path.join(pathToNodeModules, 'react/umd/react.production.min.js')],
     ['react-dom/index.js', path.join(pathToNodeModules, 'react-dom/umd/react-dom.production.min.js')],
     ['prop-types/index.js', path.join(pathToNodeModules, 'prop-types/prop-types.min.js')],
-
-    // Native ESM
     ['@tabler/icons-react', path.join(pathToNodeModules, '@tabler/icons-react/dist/esm/tabler-icons-react.js')],
+    ['lexical', path.join(pathToNodeModules, 'lexical/Lexical.mjs')],
+    ['@lexical/react/LexicalAutoFocusPlugin', path.join(pathToNodeModules, '@lexical/react/LexicalAutoFocusPlugin.mjs')],
+    ['@lexical/react/LexicalComposer', path.join(pathToNodeModules, '@lexical/react/LexicalComposer.mjs')],
+    ['@lexical/react/LexicalComposerContext', path.join(pathToNodeModules, '@lexical/react/LexicalComposerContext.mjs')],
+    ['@lexical/react/LexicalPlainTextPlugin', path.join(pathToNodeModules, '@lexical/react/LexicalPlainTextPlugin.mjs')],
+    ['@lexical/react/LexicalContentEditable', path.join(pathToNodeModules, '@lexical/react/LexicalContentEditable.mjs')],
+    ['@lexical/react/LexicalHistoryPlugin', path.join(pathToNodeModules, '@lexical/react/LexicalHistoryPlugin.mjs')],
+    ['@lexical/react/LexicalErrorBoundary', path.join(pathToNodeModules, '@lexical/react/LexicalErrorBoundary.mjs')],
   ]);
 
   return {

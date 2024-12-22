@@ -49,3 +49,6 @@ lit-html/*
 
 # Exclude unnecessary files from @typescript-eslint.
 @typescript-eslint/eslint-plugin/docs/*
+
+# Exclude all @lexical org related files, except the ones in npm_include.txt
+@lexical/*

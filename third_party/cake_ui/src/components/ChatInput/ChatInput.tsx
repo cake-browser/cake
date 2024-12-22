@@ -1,6 +1,6 @@
 import { React, useEffect, useRef } from '../../deps/react';
 
-
+// Figure out npm_exclude/include in node/ as well as BUILD.gn and rollup.config.mjs
 import { COMMAND_PRIORITY_NORMAL, KEY_DOWN_COMMAND, $getRoot } from 'lexical';
 import { AutoFocusPlugin } from '@lexical/react/LexicalAutoFocusPlugin';
 import { LexicalComposer } from '@lexical/react/LexicalComposer';
@@ -9,7 +9,6 @@ import { PlainTextPlugin } from '@lexical/react/LexicalPlainTextPlugin';
 import { ContentEditable } from '@lexical/react/LexicalContentEditable';
 import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin';
 import { LexicalErrorBoundary } from '@lexical/react/LexicalErrorBoundary';
-
 
 import { cn, getPCN } from '../../utils/cn';
 import { key } from '../../utils/keyboard';
