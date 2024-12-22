@@ -43,11 +43,11 @@ $omnibar-min-height: 26px;
   .ck-icon {
     transform-origin: center center;
     transform: scale(0);
-    transition: transform 0.35s cubic-bezier(.28,.35,.35,1);
+    transition: transform 0.365s cubic-bezier(.28,.35,.35,1);
 
     svg {
       opacity: 0;
-      transition: opacity 0.35s cubic-bezier(.28,.35,.35,1);
+      transition: opacity 0.365s cubic-bezier(.28,.35,.35,1);
     }
   }
 
@@ -72,7 +72,7 @@ $omnibar-min-height: 26px;
       right: 0;
       background-image: linear-gradient(to right, transparent 0, var(--primary-color) 40px);
       z-index: 1;
-      transition: left 0.965s cubic-bezier(.28,.35,.35,1);
+      transition: left 0.937s cubic-bezier(.28,.35,.35,1);
     }
   }
 }

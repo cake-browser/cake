@@ -1,6 +1,6 @@
 {
     "name": "@cake.dev/ui",
-    "version": "0.0.8",
+    "version": "0.0.9",
     "description": "Cake UI",
     "keywords": [
         "javascript",
@@ -34,7 +34,9 @@
         "types-generate": "dts-gen -m '@cake.dev/ui' -s"
     },
     "dependencies": {
-        "@tabler/icons-react": "^2.1.0"
+        "@lexical/react": "0.21.0",
+        "@tabler/icons-react": "^2.1.0",
+        "lexical": "0.21.0"
     },
     "devDependencies": {
         "@craco/craco": "7.1.0",

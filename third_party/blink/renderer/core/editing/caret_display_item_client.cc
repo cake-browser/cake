@@ -307,10 +307,6 @@ void CaretDisplayItemClient::PaintCaret(
   }
 
   gfx::Rect paint_rect = ToPixelSnappedRect(drawing_rect);
-
-  paint_rect.set_height(paint_rect.height() + 8);
-  paint_rect.set_y(paint_rect.y() - 4);
-
   context.FillRect(paint_rect, color_,
                    PaintAutoDarkMode(layout_block_->StyleRef(),
                                      DarkModeFilter::ElementRole::kForeground));

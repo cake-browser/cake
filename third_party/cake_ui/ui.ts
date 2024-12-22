@@ -1,4 +1,5 @@
 export * from './src/components/Icon';
+export * from './src/components/ChatInput';
 export * from './src/components/TextInput';
 export * from './src/providers/ThemeProvider';
 export {

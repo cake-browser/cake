@@ -1,0 +1,81 @@
+.ck-chat-input {
+  display: block;
+  flex: 1;
+  position: relative;
+
+  &.--xs {
+    p {
+      font-size: var(--font-size-xs);
+      line-height: var(--line-height-xs);
+    }
+  }
+
+  &.--sm {
+    p {
+      font-size: var(--font-size-sm);
+      line-height: var(--line-height-sm);
+    }
+  }
+
+  &.--md {
+    p {
+      font-size: var(--font-size-md);
+      line-height: var(--line-height-md);
+    }
+  }
+
+  &.--lg {
+    p {
+      font-size: var(--font-size-lg);
+      line-height: var(--line-height-lg);
+    }
+  }
+
+  &.--xl {
+    p {
+      font-size: var(--font-size-xl);
+      line-height: var(--line-height-xl);
+    }
+  }
+}
+
+.ck-chat-input__input,
+.ck-chat-input__ph {
+  display: block;
+  width: 100%;
+  overflow-wrap: break-word;
+  white-space: break-spaces;
+  border: none;
+  outline: none !important;
+  box-shadow: none !important;
+
+  p {
+    white-space: pre-wrap;
+    margin: 0;
+    color: rgba(var(--secondary-rgb), 0.8);
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-sm);
+    text-align: left;
+    font-family: Regular;
+
+    span {
+      font-family: inherit;
+      font-size: inherit;
+      line-height: inherit;
+      color: inherit;
+    }
+  }
+}
+
+.ck-chat-input__ph {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+
+  p {
+    color: rgba(var(--tertiary-rgb), 0.16);
+  }
+}
