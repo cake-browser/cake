@@ -17,9 +17,15 @@ const baseClass = 'ck-chat-input';
 const pcn = getPCN(baseClass);
 
 // Maybe use later if more custom classes are needed on nested elements.
-const theme = {}
+const theme = {};
 
-const KeyPressPlugin = ({ onKeyDown, onChange, onNewLineCount, onTab, onSubmit }: {
+const KeyPressPlugin = ({
+  onKeyDown,
+  onChange,
+  onNewLineCount,
+  onTab,
+  onSubmit,
+}: {
   onKeyDown?: (event: React.KeyboardEvent, value: string) => void;
   onChange?: (event: React.KeyboardEvent, value: string, lineCount: number) => void;
   onNewLineCount?: (lineCount: number) => void;
@@ -46,7 +52,7 @@ const KeyPressPlugin = ({ onKeyDown, onChange, onNewLineCount, onTab, onSubmit }
             submit && onSubmit?.(value);
             tab && onTab?.(value);
           });
-        }
+        };
 
         // SUBMIT.
         if (event.key === key.ENTER && !event.shiftKey && onSubmit) {
@@ -69,27 +75,29 @@ const KeyPressPlugin = ({ onKeyDown, onChange, onNewLineCount, onTab, onSubmit }
     );
 
     // VALUE CHANGE.
-    const changeUnregister = onChange ? editor.registerUpdateListener(({ editorState }) => {
-      editorState.read(() => {
-        const root = $getRoot();
-        const value = root.getTextContent();
-        const editorElement = editor.getRootElement();
-        
-        const currentHeight = editorElement?.offsetHeight || 1;
-        lineHeight.current = lineHeight.current || currentHeight;
-        const currentLineCount = Math.ceil(currentHeight / lineHeight.current);
+    const changeUnregister = onChange
+      ? editor.registerUpdateListener(({ editorState }) => {
+          editorState.read(() => {
+            const root = $getRoot();
+            const value = root.getTextContent();
+            const editorElement = editor.getRootElement();
 
-        if (lastKeyDownEvent.current) {
-          onChange(lastKeyDownEvent.current, value, currentLineCount);
+            const currentHeight = editorElement?.offsetHeight || 1;
+            lineHeight.current = lineHeight.current || currentHeight;
+            const currentLineCount = Math.ceil(currentHeight / lineHeight.current);
 
-          // NEW LINE COUNT.
-          if (currentLineCount !== prevLineCount.current) {
-            onNewLineCount?.(currentLineCount);
-            prevLineCount.current = currentLineCount;
-          }
-        }
-      });
-    }) : null;
+            if (lastKeyDownEvent.current) {
+              onChange(lastKeyDownEvent.current, value, currentLineCount);
+
+              // NEW LINE COUNT.
+              if (currentLineCount !== prevLineCount.current) {
+                onNewLineCount?.(currentLineCount);
+                prevLineCount.current = currentLineCount;
+              }
+            }
+          });
+        })
+      : null;
 
     return () => {
       keyDownUnregister();
@@ -115,7 +123,7 @@ export type ChatInputProps = {
   onError?: (err: Error) => void;
 };
 
-export const ChatInput = ({ 
+export const ChatInput = ({
   id,
   size = 'sm',
   placeholder = '',
@@ -128,7 +136,7 @@ export const ChatInput = ({
   onError = (err: Error) => console.error(err),
 }: ChatInputProps) => {
   const initialConfig = {
-    namespace: id, 
+    namespace: id,
     theme,
     onError,
   };
@@ -138,21 +146,19 @@ export const ChatInput = ({
       <LexicalComposer initialConfig={initialConfig}>
         <PlainTextPlugin
           contentEditable={
-            <ContentEditable
-              className={pcn('__input')} 
-              spellCheck={false}
-              autoComplete='off'
-            />
+            <ContentEditable className={pcn('__input')} spellCheck={false} autoComplete="off" />
           }
           placeholder={
             <div className={pcn('__ph')}>
-              <p><span>{placeholder}</span></p>
+              <p>
+                <span>{placeholder}</span>
+              </p>
             </div>
           }
           ErrorBoundary={LexicalErrorBoundary}
         />
         <HistoryPlugin />
-        { autoFocus && <AutoFocusPlugin /> }
+        {autoFocus && <AutoFocusPlugin />}
         <KeyPressPlugin
           onKeyDown={onKeyDown}
           onChange={onChange}

@@ -6,6 +6,7 @@ export {
   React,
   ReactDOM,
   forwardRef,
+  useLayoutEffect,
   useCallback,
   useContext,
   useEffect,
@@ -14,8 +15,8 @@ export {
   useRef,
   useState,
   useTransition,
-  jsx,
-  jsxs,
   createContext,
   createElement,
+  jsx,
+  jsxs,
 } from './src/deps/react';

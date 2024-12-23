@@ -38,6 +38,7 @@ ts_library("build_ts") {
     "${node_modules}/@types/react/index.d.ts",
     "${node_modules}/@types/react-dom/index.d.ts",
     "${node_modules}/@tabler/icons-react/dist/tabler-icons-react.d.ts",
+    "${node_modules}/lexical/index.d.ts",
     "${node_modules}/lexical/LexicalCommands.d.ts",
     "${node_modules}/lexical/LexicalConstants.d.ts",
     "${node_modules}/lexical/LexicalEditor.d.ts",
@@ -59,7 +60,6 @@ ts_library("build_ts") {
     "${node_modules}/lexical/nodes/LexicalRootNode.d.ts",
     "${node_modules}/lexical/nodes/LexicalTabNode.d.ts",
     "${node_modules}/lexical/nodes/LexicalTextNode.d.ts",
-    "${node_modules}/lexical/index.d.ts",
     "${node_modules}/@lexical/react/LexicalAutoFocusPlugin.d.ts",
     "${node_modules}/@lexical/react/LexicalComposer.d.ts",
     "${node_modules}/@lexical/react/LexicalComposerContext.d.ts",
@@ -67,9 +67,18 @@ ts_library("build_ts") {
     "${node_modules}/@lexical/react/LexicalContentEditable.d.ts",
     "${node_modules}/@lexical/react/LexicalHistoryPlugin.d.ts",
     "${node_modules}/@lexical/react/LexicalErrorBoundary.d.ts",
+    "${node_modules}/@lexical/react/useLexicalEditable.d.ts",
     "${node_modules}/@lexical/react/shared/useDecorators.d.ts",
     "${node_modules}/@lexical/react/shared/LexicalContentEditableElement.d.ts",
     "${node_modules}/@lexical/history/index.d.ts",
+    "${node_modules}/@lexical/text/index.d.ts",
+    "${node_modules}/@lexical/utils/index.d.ts",
+    "${node_modules}/@lexical/dragon/index.d.ts",
+    "${node_modules}/@lexical/plain-text/index.d.ts",
+    "${node_modules}/@lexical/selection/index.d.ts",
+    "${node_modules}/@lexical/table/index.d.ts",
+    "${node_modules}/@lexical/clipboard/index.d.ts",
+    "${node_modules}/@lexical/html/index.d.ts",
   ]
 
   path_mappings = [
@@ -99,8 +108,26 @@ ts_library("build_ts") {
         rebase_path("${node_modules}/@lexical/react/LexicalHistoryPlugin.d.ts", target_gen_dir),
     "@lexical/react/LexicalErrorBoundary|" +
         rebase_path("${node_modules}/@lexical/react/LexicalErrorBoundary.d.ts", target_gen_dir),
+    "@lexical/react/useLexicalEditable|" +
+        rebase_path("${node_modules}/@lexical/react/useLexicalEditable.d.ts", target_gen_dir),
     "@lexical/history|" +
         rebase_path("${node_modules}/@lexical/history/index.d.ts", target_gen_dir),
+    "@lexical/text|" +
+        rebase_path("${node_modules}/@lexical/text/index.d.ts", target_gen_dir),
+    "@lexical/utils|" +
+        rebase_path("${node_modules}/@lexical/utils/index.d.ts", target_gen_dir),
+    "@lexical/dragon|" +
+        rebase_path("${node_modules}/@lexical/dragon/index.d.ts", target_gen_dir),
+    "@lexical/plain-text|" +
+        rebase_path("${node_modules}/@lexical/plain-text/index.d.ts", target_gen_dir),
+    "@lexical/selection|" +
+        rebase_path("${node_modules}/@lexical/selection/index.d.ts", target_gen_dir),
+    "@lexical/table|" +
+        rebase_path("${node_modules}/@lexical/table/index.d.ts", target_gen_dir),
+    "@lexical/clipboard|" +
+        rebase_path("${node_modules}/@lexical/clipboard/index.d.ts", target_gen_dir),
+    "@lexical/html|" +
+        rebase_path("${node_modules}/@lexical/html/index.d.ts", target_gen_dir),
   ]
 }
 

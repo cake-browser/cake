@@ -14,6 +14,7 @@ if (typeof globalThis.ReactDOM === 'undefined') {
 
 const {
   forwardRef,
+  useLayoutEffect,
   useCallback,
   useContext,
   useEffect,
@@ -24,6 +25,8 @@ const {
   useTransition,
   createContext,
   createElement,
+  Suspense,
+  Fragment,
 } = React;
 
 const jsx = createElement;
@@ -33,6 +36,7 @@ export {
   React,
   ReactDOM,
   forwardRef,
+  useLayoutEffect,
   useCallback,
   useContext,
   useEffect,
@@ -45,4 +49,6 @@ export {
   jsxs,
   createContext,
   createElement,
+  Suspense,
+  Fragment,
 };

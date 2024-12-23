@@ -35,22 +35,37 @@ function plugin() {
   const redirects = new Map([
     // Custom local UMD->ESM mappings.
     ['react', path.join(hereDir, 'src/deps/esm/react.ts')],
+    ['react/jsx-runtime', path.join(hereDir, 'src/deps/esm/react.ts')],
     ['react-dom', path.join(hereDir, 'src/deps/esm/react-dom.ts')],
     ['prop-types', path.join(hereDir, 'src/deps/esm/prop-types.ts')],
 
     // Mappings to third_party/node/node_modules files.
+
+    // TODO: Do all the fucking hackjob garbage shit with every single library here that you did with the react and react-dom, 
+    // adding them to /esm by simply importing exporting again...otherwise you get BS runtime errors like process is not defined or
+    // prototype is not defined...
     ['react/index.js', path.join(pathToNodeModules, 'react/umd/react.production.min.js')],
     ['react-dom/index.js', path.join(pathToNodeModules, 'react-dom/umd/react-dom.production.min.js')],
     ['prop-types/index.js', path.join(pathToNodeModules, 'prop-types/prop-types.min.js')],
     ['@tabler/icons-react', path.join(pathToNodeModules, '@tabler/icons-react/dist/esm/tabler-icons-react.js')],
-    ['lexical', path.join(pathToNodeModules, 'lexical/Lexical.mjs')],
-    ['@lexical/react/LexicalAutoFocusPlugin', path.join(pathToNodeModules, '@lexical/react/LexicalAutoFocusPlugin.mjs')],
-    ['@lexical/react/LexicalComposer', path.join(pathToNodeModules, '@lexical/react/LexicalComposer.mjs')],
-    ['@lexical/react/LexicalComposerContext', path.join(pathToNodeModules, '@lexical/react/LexicalComposerContext.mjs')],
-    ['@lexical/react/LexicalPlainTextPlugin', path.join(pathToNodeModules, '@lexical/react/LexicalPlainTextPlugin.mjs')],
-    ['@lexical/react/LexicalContentEditable', path.join(pathToNodeModules, '@lexical/react/LexicalContentEditable.mjs')],
-    ['@lexical/react/LexicalHistoryPlugin', path.join(pathToNodeModules, '@lexical/react/LexicalHistoryPlugin.mjs')],
-    ['@lexical/react/LexicalErrorBoundary', path.join(pathToNodeModules, '@lexical/react/LexicalErrorBoundary.mjs')],
+    ['lexical', path.join(pathToNodeModules, 'lexical/Lexical.prod.mjs')],
+    ['@lexical/react/LexicalAutoFocusPlugin', path.join(pathToNodeModules, '@lexical/react/LexicalAutoFocusPlugin.prod.mjs')],
+    ['@lexical/react/LexicalComposer', path.join(pathToNodeModules, '@lexical/react/LexicalComposer.prod.mjs')],
+    ['@lexical/react/LexicalComposerContext', path.join(pathToNodeModules, '@lexical/react/LexicalComposerContext.prod.mjs')],
+    ['@lexical/react/LexicalPlainTextPlugin', path.join(pathToNodeModules, '@lexical/react/LexicalPlainTextPlugin.prod.mjs')],
+    ['@lexical/react/LexicalContentEditable', path.join(pathToNodeModules, '@lexical/react/LexicalContentEditable.prod.mjs')],
+    ['@lexical/react/LexicalHistoryPlugin', path.join(pathToNodeModules, '@lexical/react/LexicalHistoryPlugin.prod.mjs')],
+    ['@lexical/react/LexicalErrorBoundary', path.join(pathToNodeModules, '@lexical/react/LexicalErrorBoundary.prod.mjs')],
+    ['@lexical/react/useLexicalEditable', path.join(pathToNodeModules, '@lexical/react/useLexicalEditable.prod.mjs')],
+    ['@lexical/history', path.join(pathToNodeModules, '@lexical/history/LexicalHistory.prod.mjs')],
+    ['@lexical/text', path.join(pathToNodeModules, '@lexical/text/LexicalText.prod.mjs')],
+    ['@lexical/utils', path.join(pathToNodeModules, '@lexical/utils/LexicalUtils.prod.mjs')],
+    ['@lexical/dragon', path.join(pathToNodeModules, '@lexical/dragon/LexicalDragon.prod.mjs')],
+    ['@lexical/plain-text', path.join(pathToNodeModules, '@lexical/plain-text/LexicalPlainText.prod.mjs')],
+    ['@lexical/selection', path.join(pathToNodeModules, '@lexical/selection/LexicalSelection.prod.mjs')],
+    ['@lexical/table', path.join(pathToNodeModules, '@lexical/table/LexicalTable.prod.mjs')],
+    ['@lexical/clipboard', path.join(pathToNodeModules, '@lexical/clipboard/LexicalClipboard.prod.mjs')],
+    ['@lexical/html', path.join(pathToNodeModules, '@lexical/html/LexicalHtml.prod.mjs')],
   ]);
 
   return {

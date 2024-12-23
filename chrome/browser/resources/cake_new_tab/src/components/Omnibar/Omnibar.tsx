@@ -1,106 +1,78 @@
-import { React, useEffect, useState, Icon, useRef, useCallback } from 'resources/cake_ui/ui.rollup.js';
+import {
+  useEffect,
+  useState,
+  useRef, 
+  useCallback,
+  Icon,
+  ChatInput,
+} from 'resources/cake_ui/ui.rollup.js';
 import { cn, getPCN } from '../../utils/cn.js';
-// import { getProxy, ProxyEvent } from '../../proxy.js';
-// import { AutocompleteControllerType, AutocompleteMatch, OmniboxResponse } from '../../../cake_new_tab.mojom-webui.js';
+import { getProxy, ProxyEvent } from '../../proxy.js';
+import { AutocompleteMatch, OmniboxResponse } from '../../../cake_new_tab.mojom-webui.js';
 
 const baseClass = 'omnibar';
 const pcn = getPCN(baseClass);
 
 export const Omnibar = () => {
   const [animatedIn, setAnimatedIn] = useState<boolean>(false);
-  const [value, setValue] = useState('');
-  // const [results, setResults] = useState<AutocompleteMatch[]>([]);
-  const inputRef = useRef<HTMLDivElement>(null);
+  const [results, setResults] = useState<AutocompleteMatch[]>([]);
   const lastRequestQuery = useRef<string>('');
-  const hasChanged = useRef<boolean>(false);
 
   const performSearch = useCallback((value: string) => {
     lastRequestQuery.current = value;
-    // getProxy().startOmniboxQuery(value, Number(inputRef.current?.selectionEnd));
+    getProxy().startOmniboxQuery(value, value.length);
   }, [])
 
-  const onInput = useCallback((e: React.FormEvent<HTMLDivElement>) => {
-    hasChanged.current = true;
-    setValue((e.target as HTMLDivElement).innerText);
+  const onAutocompleteResponse = useCallback((_, response: OmniboxResponse) => {
+    const isForLastRequest = response.inputText === lastRequestQuery.current;
+    if (!isForLastRequest) return;
+    setResults(response.combinedResults || []);
+  }, [])
+
+  const onAutocompleteQuery = useCallback((_, inputText: string) => {
+    console.log('NEW QUERY', inputText);
+  }, [])
+
+  const onChange = useCallback((_, value: string) => {
+    value = value.trim();
+    value && performSearch(value);
+  }, [performSearch])
+
+  const onSubmit = useCallback((value: string) => {
+    console.log('SUBMIT', value);
   }, [])
   
-  // const onAutocompleteResponse = useCallback((
-  //   controllerType: AutocompleteControllerType,
-  //   response: OmniboxResponse,
-  // ) => {
-  //   console.log('NEW RESPONSE', controllerType, response);
-
-  //   const isForLastRequest = response.inputText === lastRequestQuery.current.trimStart();
-  //   if (!isForLastRequest) return;
-
-  //   setResults(response.combinedResults || []);
-  // }, [value])
-
-  // const onAutocompleteQuery = useCallback((
-  //   controllerType: AutocompleteControllerType, 
-  //   inputText: string,
-  // ) => {
-  //   console.log('NEW QUERY', controllerType, inputText);
-  // }, [])
-  
-  // const onAnswerImageData = useCallback((
-  //   controllerType: AutocompleteControllerType,
-  //   url: string,
-  //   data: string,
-  // ) => {
-  //   console.log('ANSWER IMAGE DATA', controllerType, url, data);
-  // }, [])
-
   useEffect(() => {
-    if (animatedIn) {
-      setTimeout(() => inputRef.current?.focus(), 1);
-    } else {
-      setTimeout(() => setAnimatedIn(true), 10);
-    }
+    animatedIn || setTimeout(() => setAnimatedIn(true), 10);
   }, [animatedIn]);
 
   useEffect(() => {
-    // const proxy = getProxy();
-    // const eventIds: number[] = [
-    //   proxy.addListener(ProxyEvent.AutocompleteResponse, onAutocompleteResponse),
-    //   proxy.addListener(ProxyEvent.AutocompleteQuery, onAutocompleteQuery),
-    //   proxy.addListener(ProxyEvent.AnswerImageData, onAnswerImageData),
-    // ];
-    // return () => eventIds.forEach(id => getProxy().removeListener(id));
+    const proxy = getProxy();
+    const eventIds: number[] = [
+      proxy.addListener(ProxyEvent.AutocompleteResponse, onAutocompleteResponse),
+      proxy.addListener(ProxyEvent.AutocompleteQuery, onAutocompleteQuery),
+    ];
+    return () => eventIds.forEach(id => getProxy().removeListener(id));
   }, []);
 
-  useEffect(() => {
-    hasChanged.current && performSearch(value);
-  }, [value, performSearch]);
-
-  const classes = cn(
-    baseClass, 
-    animatedIn ? pcn('--show') : '',
-  );
-
-  const lines = value.split('\n');
-  const showPlaceholder = lines.length === 1 && lines[0] === '';
+  console.log('RESULTS', results);
 
   return (
-    <div className={classes}>
+    <div className={cn(baseClass, animatedIn ? pcn('--show') : '')}>
       <div className={pcn('__input-bar')}>
-        <Icon icon='search' size='xs' attention='highest' />
-        <div
-          className='ck-super-input --md'
-          // onKeyDown={onKeyDown}
-          onInput={onInput}
-          ref={inputRef}>
-          {lines.map((line, i) => (
-            <p key={i}>
-              {line}
-            </p>
-          ))}
-          {showPlaceholder && (
-            <span className='ck-super-input__placeholder'>
-              Explore something new...
-            </span>
-          )}
-        </div>
+        <Icon 
+          icon='search' 
+          size='xs' 
+          attention='highest' 
+        />
+        <ChatInput
+          id={baseClass}
+          autoFocus={true}
+          size="md"
+          placeholder="Explore something new..."
+          onChange={onChange}
+          onSubmit={onSubmit}
+        />
       </div>
     </div>
   );

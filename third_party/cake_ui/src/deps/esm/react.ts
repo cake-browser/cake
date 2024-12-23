@@ -4,6 +4,7 @@ const React = globalThis.React;
 
 const {
   forwardRef,
+  useLayoutEffect,
   useCallback,
   useContext,
   useEffect,
@@ -14,10 +15,17 @@ const {
   useTransition,
   createContext,
   createElement,
+  Suspense,
+  Fragment,
+  Component,
 } = React;
+
+const jsx = createElement;
+const jsxs = jsx;
 
 export {
   forwardRef,
+  useLayoutEffect,
   useCallback,
   useContext,
   useEffect,
@@ -28,6 +36,11 @@ export {
   useTransition,
   createContext,
   createElement,
+  jsx,
+  jsxs,
+  Suspense,
+  Fragment,
+  Component,
 };
 
 export default React;
