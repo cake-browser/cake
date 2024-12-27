@@ -1,8 +1,8 @@
 import { PageProps } from './types.js';
-import { Omnibar } from '../components/Omnibar/Omnibar.js';
+import { Omni } from '../omni/Omni.js';
 
 export const EntryPage = ({ id, navToPage }: PageProps) => ( 
   <div id={id} className='ntp'>
-    <Omnibar />
+    <Omni />
   </div>
 );

@@ -116,14 +116,7 @@ interface CakeNewTabPageHandler {
   // Registers the webui page.
   SetClientPage(pending_remote<CakeNewTabPage> page);
   // Prompts an autocomplete controller to process an omnibox query.
-  StartOmniboxQuery(string input_string,
-                    bool reset_autocomplete_controller,
-                    int32 cursor_position,
-                    bool zero_suggest,
-                    bool prevent_inline_autocomplete,
-                    bool prefer_keyword,
-                    string current_url,
-                    int32 page_classification);
+  StartOmniboxQuery(string input_string);
   // Gets the ML model version.
   GetMlModelVersion() => (int32 version);
   // Runs `AutocompleteScoringModelService`.

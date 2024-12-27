@@ -463,39 +463,17 @@ void CakeNewTabPageHandler::SetClientPage(
   page_.Bind(std::move(page));
 }
 
-void CakeNewTabPageHandler::StartOmniboxQuery(const std::string& input_string,
-                                           bool reset_autocomplete_controller,
-                                           int32_t cursor_position,
-                                           bool zero_suggest,
-                                           bool prevent_inline_autocomplete,
-                                           bool prefer_keyword,
-                                           const std::string& current_url,
-                                           int32_t page_classification) {
-  // Reset the controller.  If we don't do this, then the
-  // AutocompleteController might inappropriately set its |minimal_changes|
-  // variable (or something else) and some providers will short-circuit
-  // important logic and return stale results.  In short, we want the
-  // actual results to not depend on the state of the previous request.
-  if (reset_autocomplete_controller)
-    controller_ = CreateController(false);
+void CakeNewTabPageHandler::StartOmniboxQuery(const std::string& input_string) {
   AutocompleteInput input(
-      base::UTF8ToUTF16(input_string), cursor_position,
-      static_cast<metrics::OmniboxEventProto::PageClassification>(
-          page_classification),
+      base::UTF8ToUTF16(input_string), input_string.length(),
+      static_cast<metrics::OmniboxEventProto::PageClassification>(1),
       ChromeAutocompleteSchemeClassifier(profile_));
-  GURL current_url_gurl{current_url};
-  if (current_url_gurl.is_valid())
-    input.set_current_url(current_url_gurl);
-  input.set_current_title(base::UTF8ToUTF16(current_url));
-  input.set_prevent_inline_autocomplete(prevent_inline_autocomplete);
-  input.set_prefer_keyword(prefer_keyword);
-  if (prefer_keyword)
-    input.set_keyword_mode_entry_method(metrics::OmniboxEventProto::TAB);
-  input.set_focus_type(
-      zero_suggest ? input.text().empty() && current_url_gurl.is_valid()
-                         ? metrics::OmniboxFocusType::INTERACTION_CLOBBER
-                         : metrics::OmniboxFocusType::INTERACTION_FOCUS
-                   : metrics::OmniboxFocusType::INTERACTION_DEFAULT);
+
+  input.set_current_title(std::u16string());
+  input.set_prevent_inline_autocomplete(false);
+  input.set_prefer_keyword(false);
+  input.set_focus_type(metrics::OmniboxFocusType::INTERACTION_DEFAULT);
+
   controller_->Start(input);
 }
 

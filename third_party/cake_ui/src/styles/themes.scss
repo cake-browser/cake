@@ -21,6 +21,7 @@
   --accent-overlay-rgb: var(--rgb-white);
 
   --background-faint: rgba(var(--tertiary-rgb), 0.05);
+  --background-faintest: rgba(var(--tertiary-rgb), 0.02);
   --outline-faint: rgba(var(--tertiary-rgb), 0.08);
   --outline-strong: var(--secondary-color);
 }
@@ -46,6 +47,7 @@
   --accent-overlay-rgb: var(--rgb-black);
 
   --background-faint: rgba(var(--tertiary-rgb), 0.08);
+  --background-faintest: rgba(var(--tertiary-rgb), 0.02);
   --outline-faint: rgba(var(--tertiary-rgb), 0.1);
   --outline-strong: rgba(var(--secondary-rgb), 0.9);
 }

@@ -1,0 +1,86 @@
+$omni-search-result-focus-transition-duration: 0.04s;
+$omni-search-result-icon-text-spacing: 16px;
+$omni-search-result-title-max-width: 80%;
+$omni-search-result-title-font-size: 12px;
+$omni-search-result-horizontal-padding: 12px;
+
+.omni-search-result {
+  display: block;
+  width: 100%;
+  height: $omni-search-result-height;
+  cursor: pointer;
+
+  &:hover,
+  &.omni-search-result--focused {
+    .omni-search-result__liner {
+      background-color: var(--background-faintest);
+    }
+
+    .omni-search-result__icon {
+      img {
+        filter: grayscale(0) brightness(1);
+        opacity: 1;
+      }
+
+      svg {
+        stroke: rgba(var(--tertiary-rgb), 0.9);
+      }
+    }
+
+    .omni-search-result__title {
+      opacity: 1;
+    }
+  }
+}
+
+.omni-search-result__liner {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  height: 100%;
+  border-radius: var(--border-radius-sm);
+  background-color: transparent;
+  transition: background-color $omni-search-result-focus-transition-duration ease;
+  padding: 0 $omni-search-result-horizontal-padding;
+}
+
+.omni-search-result__icon {
+  display: flex;
+  width: var(--icon-sm);
+  height: var(--icon-sm);
+  align-items: center;
+  justify-content: center;
+
+  &.ck-icon--xs {
+    width: var(--icon-sm);
+    height: var(--icon-sm);
+  }
+
+  img {
+    width: 100%;
+    height: auto;
+    filter: grayscale(1) brightness(0.975);
+    opacity: 0.37;
+    transition: opacity $omni-search-result-focus-transition-duration ease, filter $omni-search-result-focus-transition-duration ease;
+  }
+
+  svg {
+    stroke: rgba(var(--tertiary-rgb), 0.55);
+    transition: stroke $omni-search-result-focus-transition-duration ease;
+  }
+}
+
+.omni-search-result__title {
+  display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: $omni-search-result-title-max-width;
+  font-size: $omni-search-result-title-font-size;
+  margin-left: $omni-search-result-icon-text-spacing;
+  color: var(--secondary-color);
+  opacity: 0.52;
+  transition: opacity $omni-search-result-focus-transition-duration ease;
+}

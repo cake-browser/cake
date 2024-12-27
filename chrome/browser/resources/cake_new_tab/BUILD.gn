@@ -41,8 +41,10 @@ build_webui("build") {
   non_web_component_files = [
     "src/proxy.ts",
     "src/utils/cn.ts",
-    "src/components/Omnibar/Omnibar.tsx",
-    "src/components/Omnibar/index.ts",
+    "src/utils/url.ts",
+    "src/omni/types.ts",
+    "src/omni/Omni.tsx",
+    "src/omni/SearchResult.tsx",
     "src/pages/types.ts",
     "src/pages/EntryPage.tsx",
     "src/pages/PageManager.tsx",
@@ -64,7 +66,7 @@ build_webui("build") {
   ]
 
   ts_path_mappings = [
-    "resources/cake_ui/ui.rollup.js|../../../../third_party/cake_ui/ui.d.ts"
+    "resources/cake_ui/ui.rollup.js|../../../../third_party/cake_ui/ui.d.ts",
   ]
 
   extra_grdp_deps = [

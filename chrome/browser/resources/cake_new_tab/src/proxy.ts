@@ -1,8 +1,5 @@
-import { 
-  CakeNewTabPageHandler,
-  CakeNewTabPageHandlerRemote, 
-  CakeNewTabPageCallbackRouter,
-} from '../cake_new_tab.mojom-webui.js';
+// @ts-ignore
+import { CakeNewTabPageHandler, CakeNewTabPageHandlerRemote, CakeNewTabPageCallbackRouter } from '../cake_new_tab.mojom-webui.js';
 
 export enum ProxyEvent {
   AutocompleteResponse = 'handleNewAutocompleteResponse',
@@ -20,17 +17,8 @@ class Proxy {
     this.handler.setClientPage(this.callbackRouter.$.bindNewPipeAndPassRemote());
   }
   
-  startOmniboxQuery(query: string, cursorPosition: number) {
-    this.handler.startOmniboxQuery(
-      query,
-      false,
-      cursorPosition,
-      false,
-      false,
-      false,
-      '',
-      1,
-    );
+  startOmniboxQuery(query: string) {
+    this.handler.startOmniboxQuery(query);
   }
 
   addListener(event: ProxyEvent, listener: any): number {

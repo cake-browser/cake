@@ -12,13 +12,30 @@ module.exports = {
       webpackConfig.resolve.plugins.push({
         apply: (resolver) => {
           resolver.hooks.resolve.tapAsync('StripJsExtension', (request, resolveContext, callback) => {
-            // Check if the request path ends with .js
-            if (request.request && request.request.endsWith('.js') && !request.request.endsWith('ui.rollup.js')) {
-              // Create new request with .js stripped off
-              const newRequest = {
-                ...request,
-                request: request.request.replace(/\.js$/, '')
-              };
+            if (
+              request.request && 
+              request.request.endsWith('.js') && 
+              !request.request.endsWith('ui.rollup.js')
+            ) {
+              let newRequest
+
+              if (request.request.endsWith('/proxy.js')) {
+                newRequest = {
+                  ...request,
+                  request: request.request.replace('/proxy.js', '/dev/proxy')
+                };
+              } else if (request.request.endsWith('/cake_new_tab.mojom-webui.js')) {
+                newRequest = {
+                  ...request,
+                  request: request.request.replace('../cake_new_tab.mojom-webui.js', '/dev/mojom')
+                };
+              } else {
+                newRequest = {
+                  ...request,
+                  request: request.request.replace(/\.js$/, '')
+                };
+              }
+
               return resolver.doResolve(
                 resolver.hooks.resolve,
                 newRequest,

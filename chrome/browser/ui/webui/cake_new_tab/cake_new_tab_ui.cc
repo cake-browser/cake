@@ -32,10 +32,10 @@ CakeNewTabUI::CakeNewTabUI(content::WebUI* web_ui)
       network::mojom::CSPDirectiveName::TrustedTypes,
       "trusted-types static-types parse-html-subset;");
 
-  webui::SetupWebUIDataSource(
-      source,
-      base::span(kCakeNewTabResources),
-      IDR_CAKE_NEW_TAB_INDEX_HTML);
+  source->AddResourcePaths(
+      base::make_span(kCakeNewTabResources, kCakeNewTabResourcesSize));
+
+  source->SetDefaultResource(IDR_CAKE_NEW_TAB_INDEX_HTML);
 }
 
 WEB_UI_CONTROLLER_TYPE_IMPL(CakeNewTabUI)

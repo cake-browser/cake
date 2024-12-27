@@ -1,0 +1,149 @@
+$omni-transition-duration: 0.35s;
+$omni-transition-icon-duration-offset: 0.05s;
+$omni-transition-input-duration-offset: 0.08s;
+$omni-input-icon-size: 26px;
+$omni-chat-input-left-spacing: 14px;
+$omni-search-results-extra-length: 14px;
+$omni-search-result-height: 44px;
+$omni-search-results-overhang-offset: calc(#{$omni-search-result-height} / 2);
+$omni-max-search-results-in-view: 5;
+$omni-max-search-results-height: calc((#{$omni-search-result-height} * #{$omni-max-search-results-in-view}) + (2 * #{$omni-search-results-overhang-offset}));
+
+.omni {
+  @include flex-container;
+  position: relative;
+
+  &.omni--show {
+
+    .omni__input-bar {
+      filter: blur(0px);
+    }
+
+    .ck-icon {
+      transform: scale(1);
+      opacity: 1;
+
+      svg {
+        opacity: 1;
+      }
+    }
+
+    .ck-chat-input {
+      opacity: 1;
+      padding-right: calc(#{$omni-input-icon-size} + #{$omni-chat-input-left-spacing});
+      
+      .ck-chat-input__input {
+        caret-color: var(--secondary-color);
+      }
+
+      .ck-chat-input__ph > p > span::after {
+        left: 100%;
+      }
+    }
+  }
+}
+
+.omni__input-bar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  width: var(--col1-width-md);
+  filter: blur(2px);
+  transition: filter $omni-transition-duration var(--tt-ease);
+
+  .ck-icon {
+    transform-origin: center center;
+    transform: scale(0);
+    transition: transform calc(#{$omni-transition-duration} + #{$omni-transition-icon-duration-offset}) var(--tt-ease);
+
+    svg {
+      opacity: 0;
+      transition: opacity calc(#{$omni-transition-duration} + #{$omni-transition-icon-duration-offset}) var(--tt-ease);
+    }
+  }
+
+  .ck-chat-input {
+    margin-left: $omni-chat-input-left-spacing;
+    opacity: 0;
+    transition: opacity calc(#{$omni-transition-duration} + #{$omni-transition-input-duration-offset}) var(--tt-ease);
+    position: relative;
+    z-index: 0;
+
+    .ck-chat-input__input {
+      caret-color: transparent;
+      transition: caret-color calc(#{$omni-transition-duration} + #{$omni-transition-input-duration-offset}) var(--tt-ease);
+    }
+    
+    .ck-chat-input__ph > p > span {
+      position: relative;
+
+      &::after {
+        content: '';
+        position: absolute;
+        left: -5px;
+        top: -5px;
+        bottom: -5px;
+        right: 0;
+        background-image: linear-gradient(to right, transparent 0, var(--primary-color) 40px);
+        z-index: 1;
+        transition: left calc(#{$omni-transition-duration} + #{$omni-transition-input-duration-offset}) var(--tt-ease);
+      }
+    }
+  }
+}
+
+.omni__search-results {
+  display: block;
+  position: absolute;
+  top: calc(50% + (#{$omni-input-icon-size} / 2) + #{$omni-search-results-overhang-offset});
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(var(--col1-width-md) + #{$omni-search-results-extra-length});
+  height: $omni-max-search-results-height;
+
+  // TOP
+  &:before {
+    content: '';
+    position: absolute;
+    top: 0px;
+    left: -5px;
+    right: -5px;
+    height: calc((#{$omni-search-result-height} / 2) + 2px);
+    background-image: linear-gradient(to bottom, var(--primary-color), var(--primary-color) 8px, transparent);
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  // BOTTOM
+  &:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: -5px;
+    right: -5px;
+    height: calc(#{$omni-search-result-height} + #{$omni-search-results-overhang-offset});
+    background-image: linear-gradient(to top, var(--primary-color), var(--primary-color) $omni-search-results-overhang-offset, rgba(var(--primary-rgb), 0.5) 75%, transparent);
+    z-index: 1;
+    pointer-events: none;
+  }
+}
+
+.omni__search-results-liner {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+
+  .omni-search-result:first-child {
+    margin-top: $omni-search-results-overhang-offset;
+  }
+
+  .omni-search-result:last-child {
+    margin-bottom: calc(#{$omni-search-result-height} + 15px);
+  }
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
