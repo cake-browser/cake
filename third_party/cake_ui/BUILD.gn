@@ -22,7 +22,7 @@ ts_library("build_ts") {
     "src/providers/ThemeProvider/themes.ts",
     "src/providers/ThemeProvider/index.ts",
     "src/components/Icon/Icon.tsx",
-    "src/components/Icon/icons.ts",
+    "src/components/Icon/icons.tsx",
     "src/components/Icon/index.ts",
     "src/components/TextInput/TextInput.tsx",
     "src/components/TextInput/index.ts",

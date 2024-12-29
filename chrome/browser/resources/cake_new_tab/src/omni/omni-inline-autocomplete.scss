@@ -1,0 +1,28 @@
+$omni-inline-autocomplete-height: 24.5px;
+
+.omni-inline-autocomplete {
+  position: absolute;
+  z-index: 0;
+  display: inline-block;
+  left: calc(#{$omni-input-icon-size} + #{$omni-chat-input-left-spacing});
+  top: calc((#{$omni-input-icon-size} - #{$omni-inline-autocomplete-height}) / 2);
+  height: $omni-inline-autocomplete-height;
+  font-family: Regular;
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-md);
+  pointer-events: none;
+
+  span {
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+
+    &:first-child {
+      color: transparent;
+    }
+
+    &:last-child {
+      color: rgba(var(--tertiary-rgb), 0.22);
+    }
+  }
+}

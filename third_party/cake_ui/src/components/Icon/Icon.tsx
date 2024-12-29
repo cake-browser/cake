@@ -17,6 +17,7 @@ export type IconProps = React.HTMLAttributes<HTMLButtonElement> & {
   attention?: IconAttention;
   options?: string[];
 };
+[];
 
 export const Icon = ({
   icon,

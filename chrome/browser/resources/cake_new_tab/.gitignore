@@ -21,3 +21,4 @@ src/styles/index.css.map
 
 # Dev
 src/dev.tsx
+src/scrap.ts
