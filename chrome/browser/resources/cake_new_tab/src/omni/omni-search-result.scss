@@ -1,3 +1,4 @@
+$omni-search-result-transition-duration: 0.25s;
 $omni-search-result-focus-transition-duration: 0s;
 $omni-search-result-icon-text-spacing: 15px;
 $omni-search-result-title-max-width: 60%;
@@ -12,6 +13,16 @@ $omni-search-result-annotation-divider-opacity: 0.065;
   width: 100%;
   height: $omni-search-result-height;
   cursor: pointer;
+  transition: opacity $omni-search-result-transition-duration var(--tt-ease), transform $omni-search-result-transition-duration var(--tt-ease);
+  opacity: 0;
+  transform: translateY(0);
+
+  @for $i from 1 through 7 {
+    &:nth-child(#{$i}) {
+      transform: translateY(10px);
+      transition-delay: #{($i - 1) * 28}ms;
+    }
+  }
 
   &.omni-search-result--search-type {
     .omni-search-result__annotation > span {

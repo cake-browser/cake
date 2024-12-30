@@ -15,7 +15,7 @@ import { SearchResult } from './SearchResult.js';
 import { InlineAutocomplete, InlineAutocompleteHandle, InlineAutocompleteProps } from './InlineAutocomplete.js';
 import { applyCustomSortAndFilterRules } from './utils.js';
 import { key } from '../utils/keyboard.js';
-import { results } from '../dev/data/search.js';
+// import { results } from '../dev/data/search.js';
 
 const baseClass = 'omni';
 const pcn = getPCN(baseClass);
@@ -38,16 +38,22 @@ const SEARCH_RESULTS_PER_PAGE = 4;
  * Omni input component.
  */
 export const Omni = () => {
+  // State
+  const [_, forceRender] = useState<boolean>(false);
   const [animatedIn, setAnimatedIn] = useState<boolean>(false);
   const [searchResultsState, setSearchResultsState] = useState<SearchResultsState>({
     results: [],
     focusedIndex: 0,
   });
+
+  // Refs
   const inlineAutocompleteRef = useRef<InlineAutocompleteHandle>(null);
   const lastRequestQuery = useRef<string>('');
   const currentValue = useRef<string>('');
   const nextInlineAutocompleteProps = useRef<InlineAutocompleteProps | null>(null);
   const searchResultsLinerRef = useRef<HTMLDivElement>(null);
+  const lastSearchResultsCount = useRef<number>(0);
+  const showSearchResults = useRef<boolean>(false);
   
   /**
    * = Actions ---------------------
@@ -57,20 +63,20 @@ export const Omni = () => {
     lastRequestQuery.current = value;
     getProxy().startOmniboxQuery(value);
 
-    let inputText = '';
-    let completionText = '';
-    const showInlineAutocomplete = (
-      results.length && 
-      !results[0].isSearchType && 
-      !!results[0].inlineAutocompletion
-    );
-    if (showInlineAutocomplete) {
-      inputText = currentValue.current;
-      completionText = results[0].inlineAutocompletion;
-    }
-    nextInlineAutocompleteProps.current = { inputText, completionText };
+    // let inputText = '';
+    // let completionText = '';
+    // const showInlineAutocomplete = (
+    //   results.length && 
+    //   !results[0].isSearchType && 
+    //   !!results[0].inlineAutocompletion
+    // );
+    // if (showInlineAutocomplete) {
+    //   inputText = currentValue.current;
+    //   completionText = results[0].inlineAutocompletion;
+    // }
+    // nextInlineAutocompleteProps.current = { inputText, completionText };
 
-    setSearchResultsState({ results, focusedIndex: 0 });
+    // setSearchResultsState({ results, focusedIndex: 0 });
   }, [])
 
   const maybeAcceptInlineAutocomplete = useCallback(() => {
@@ -171,7 +177,7 @@ export const Omni = () => {
         break;
       case key.ARROW_RIGHT:
         cursorAtEndPosition && maybeAcceptInlineAutocomplete();
-        break;        
+        break;
       case key.ESCAPE:
         event.preventDefault();
         onEscape();
@@ -188,6 +194,7 @@ export const Omni = () => {
     } else {
       lastRequestQuery.current = '';
       nextInlineAutocompleteProps.current = { inputText: '', completionText: '' };
+      showSearchResults.current = false;
       setSearchResultsState({ results: [], focusedIndex: 0 });
     }
   }, [performSearch])
@@ -200,10 +207,12 @@ export const Omni = () => {
    * = Effects -----------------------
    */
 
+  // Initial input bar animation.
   useEffect(() => {
     animatedIn || setTimeout(() => setAnimatedIn(true), 10);
   }, [animatedIn]);
 
+  // Set up proxy event listeners.
   useEffect(() => {
     const proxy = getProxy();
     const eventIds: number[] = [
@@ -212,6 +221,7 @@ export const Omni = () => {
     return () => eventIds.forEach(id => getProxy().removeListener(id));
   }, []);
 
+  // Update inline autocomplete if needed.
   useEffect(() => {
     if (nextInlineAutocompleteProps.current) {
       inlineAutocompleteRef.current?.update(nextInlineAutocompleteProps.current);
@@ -221,6 +231,7 @@ export const Omni = () => {
     }
   })
 
+  // Scroll to focused search result if out of view.
   useEffect(() => {
     const containerElement = searchResultsLinerRef.current;
     const focusedElement = containerElement?.children[searchResultsState.focusedIndex] as HTMLElement;
@@ -256,11 +267,23 @@ export const Omni = () => {
         newScrollTop = currentScroll + (elementRelativeTop - containerRect.height + elementRect.height);
       }
 
-      console.log('newScrollTop', newScrollTop, newScrollTop / SEARCH_RESULT_HEIGHT);
-
       containerElement.scrollTo({ top: newScrollTop });
     }
   }, [searchResultsState.focusedIndex])
+
+  useEffect(() => {
+    const hadNoPreviousResults = lastSearchResultsCount.current === 0;
+    const hasCurrentResults = searchResultsState.results.length > 0;
+    const doShowSearchResults = hadNoPreviousResults && hasCurrentResults;
+    lastSearchResultsCount.current = searchResultsState.results.length;
+
+    if (doShowSearchResults) {
+      showSearchResults.current = true;
+      setTimeout(() => forceRender(v => !v), 15);
+    } else if (!hasCurrentResults) {
+      showSearchResults.current = false;
+    }
+  }, [searchResultsState.results.length])
 
   /**
    * = Rendering ---------------------
@@ -286,7 +309,7 @@ export const Omni = () => {
         />
         <InlineAutocomplete ref={inlineAutocompleteRef} />
       </div>
-      <div className={pcn('__search-results')}>
+      <div className={pcn('__search-results', showSearchResults.current ? '__search-results--show' : '')}>
         <div className={pcn('__search-results-liner')} ref={searchResultsLinerRef}>
           { searchResultsState.results.map((r, i) => (
             <SearchResult

@@ -103,6 +103,13 @@ $omni-max-search-results-height: calc((#{$omni-search-result-height} * #{$omni-m
   width: calc(var(--col1-width-md) + #{$omni-search-results-extra-length});
   height: $omni-max-search-results-height;
 
+  &.omni__search-results--show {
+    .omni-search-result {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
   // TOP
   &:before {
     content: '';
