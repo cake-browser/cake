@@ -93,37 +93,45 @@ export const Omni = () => {
     console.log('Accept Inline Autocompletion:', fullValue);
   }, []);
 
+  const setNextInlineAutoComplete = useCallback((results: OmniSearchResultMatch[], index: number) => {
+    let inputText = '';
+    let completionText = '';
+    const showInlineAutocomplete = (
+      results.length && 
+      !results[index].isSearchType && 
+      !!results[index].inlineAutocompletion
+    );
+    if (showInlineAutocomplete) {
+      inputText = currentValue.current;
+      completionText = results[index].inlineAutocompletion;
+    }
+    nextInlineAutocompleteProps.current = { inputText, completionText };
+  }, [])
+
   /**
    * = Proxy Handlers --------------
    */
 
   const onAutocompleteResponse = useCallback((_, response: OmniboxResponse) => {
     const isForLastRequest = response.inputText === lastRequestQuery.current;
-    if (!isForLastRequest) return;
+    const valueHasSinceChanged = response.inputText !== currentValue.current.trim();
+    if (!isForLastRequest || valueHasSinceChanged) return;
 
-    const results = applyCustomSortAndFilterRules(
-      response.combinedResults || [], 
-      response.inputText
+    let results = response.combinedResults || [];
+
+    const allProvidersDone = results.every(r => r.providerDone);
+    const useResults = (
+      allProvidersDone || 
+      response.inputText.length === 1 ||
+      inlineAutocompleteRef.current?.hasCompletionText()
     );
+    if (!useResults) return;
 
-    // Update inline autocomplete on next render.
-    let inputText = '';
-    let completionText = '';
-    const showInlineAutocomplete = (
-      results.length && 
-      !results[0].isSearchType && 
-      !!results[0].inlineAutocompletion
-    );
-    if (showInlineAutocomplete) {
-      inputText = currentValue.current;
-      completionText = results[0].inlineAutocompletion;
-    }
+    results = applyCustomSortAndFilterRules(results, response.inputText);
 
-    // For next render.
-    nextInlineAutocompleteProps.current = { inputText, completionText };
-
+    setNextInlineAutoComplete(results, 0);
     setSearchResultsState({ results, focusedIndex: 0 });
-  }, [])
+  }, [setNextInlineAutoComplete])
 
   /**
    * = Event Handlers ----------------
@@ -139,9 +147,11 @@ export const Omni = () => {
         newIndex = results.length - 1;
       }
 
+      setNextInlineAutoComplete(results, newIndex);
+
       return { results, focusedIndex: newIndex };
     });
-  }, [])
+  }, [setNextInlineAutoComplete])
 
   const onArrowDown = useCallback(() => {
     setSearchResultsState(prevState => {
@@ -153,9 +163,11 @@ export const Omni = () => {
         newIndex = 0;
       }
 
+      setNextInlineAutoComplete(results, newIndex);
+
       return { results, focusedIndex: newIndex };
     });
-  }, [])
+  }, [setNextInlineAutoComplete])
 
   const onEscape = useCallback(() => {
     console.log('ESCAPE');
@@ -288,6 +300,8 @@ export const Omni = () => {
   /**
    * = Rendering ---------------------
    */
+
+  console.log(searchResultsState.results);
 
   return (
     <div className={cn(baseClass, animatedIn ? pcn('--show') : '')}>

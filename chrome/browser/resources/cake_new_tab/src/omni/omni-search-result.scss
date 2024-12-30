@@ -1,4 +1,4 @@
-$omni-search-result-transition-duration: 0.25s;
+$omni-search-result-transition-duration: 0.267s;
 $omni-search-result-focus-transition-duration: 0s;
 $omni-search-result-icon-text-spacing: 15px;
 $omni-search-result-title-max-width: 60%;
@@ -20,7 +20,7 @@ $omni-search-result-annotation-divider-opacity: 0.065;
   @for $i from 1 through 7 {
     &:nth-child(#{$i}) {
       transform: translateY(10px);
-      transition-delay: #{($i - 1) * 28}ms;
+      transition-delay: #{($i - 1) * 29}ms;
     }
   }
 

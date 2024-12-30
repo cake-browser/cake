@@ -71,6 +71,14 @@ const handleNoSearchWhatYouTyped = (results: OmniSearchResultMatch[], inputText:
   }
 
   if (exactMatch) {
+    if (
+      others.length && 
+      !others[0].isSearchType && 
+      others[0].inlineAutocompletion && 
+      others[0].relevance > exactMatch.relevance
+    ) {
+      return results;
+    }
     return [exactMatch, ...others];
   }
 
