@@ -1,5 +1,11 @@
 import { React, useEffect, useRef } from '../../deps/react';
-import { COMMAND_PRIORITY_NORMAL, KEY_DOWN_COMMAND, $getRoot } from 'lexical';
+import {
+  COMMAND_PRIORITY_NORMAL,
+  KEY_DOWN_COMMAND,
+  $getRoot,
+  $getSelection,
+  RangeSelection,
+} from 'lexical';
 import { AutoFocusPlugin } from '@lexical/react/LexicalAutoFocusPlugin';
 import { LexicalComposer } from '@lexical/react/LexicalComposer';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
@@ -24,7 +30,7 @@ const KeyPressPlugin = ({
   onTab,
   onSubmit,
 }: {
-  onKeyDown?: (event: React.KeyboardEvent, value: string) => void;
+  onKeyDown?: (event: React.KeyboardEvent, value: string, cursorAtEndPosition: boolean) => void;
   onChange?: (event: React.KeyboardEvent, value: string, lineCount: number) => void;
   onNewLineCount?: (lineCount: number) => void;
   onTab?: (value: string) => void;
@@ -46,7 +52,11 @@ const KeyPressPlugin = ({
           editor.getEditorState().read(() => {
             const root = $getRoot();
             const value = root.getTextContent();
-            onKeyDown?.(event, value);
+            const selection = $getSelection() as RangeSelection;
+            const cursorAtEndPosition = selection
+              ? selection.anchor.offset === value.length
+              : false;
+            onKeyDown?.(event, value, cursorAtEndPosition);
             submit && onSubmit?.(value);
             tab && onTab?.(value);
           });
@@ -113,7 +123,7 @@ export type ChatInputProps = {
   size?: ChatInputSize;
   placeholder?: string;
   autoFocus?: boolean;
-  onKeyDown?: (event: React.KeyboardEvent, value: string) => void;
+  onKeyDown?: (event: React.KeyboardEvent, value: string, cursorAtEndPosition: boolean) => void;
   onChange?: (event: React.KeyboardEvent, value: string, lineCount: number) => void;
   onNewLineCount?: (lineCount: number) => void;
   onTab?: (value: string) => void;

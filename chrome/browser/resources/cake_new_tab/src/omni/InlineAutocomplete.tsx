@@ -9,6 +9,7 @@ export type InlineAutocompleteProps = {
 
 export type InlineAutocompleteHandle = {
   update: (props: InlineAutocompleteProps) => void;
+  getData: () => InlineAutocompleteProps;
 };
 
 export const InlineAutocomplete = forwardRef<InlineAutocompleteHandle, InlineAutocompleteProps>((props, ref) => {
@@ -16,7 +17,8 @@ export const InlineAutocomplete = forwardRef<InlineAutocompleteHandle, InlineAut
 
   useImperativeHandle(ref, () => ({
     update: (props: InlineAutocompleteProps) => setData(props),
-  }));
+    getData: () => data,
+  }), [data]);
 
   return (
     <div className={baseClass}>

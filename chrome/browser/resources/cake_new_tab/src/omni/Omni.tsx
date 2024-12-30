@@ -73,6 +73,20 @@ export const Omni = () => {
     setSearchResultsState({ results, focusedIndex: 0 });
   }, [])
 
+  const maybeAcceptInlineAutocomplete = useCallback(() => {
+    const data = inlineAutocompleteRef.current?.getData();
+    if (!data) return;
+
+    const { inputText, completionText } = data;
+    if (!inputText || !completionText) return;
+
+    const fullValue = inputText + completionText;
+    if (!fullValue) return;
+
+    // TODO: Come back to this when dealing with the programmatic modification of the ChatInput value.
+    console.log('Accept Inline Autocompletion:', fullValue);
+  }, []);
+
   /**
    * = Proxy Handlers --------------
    */
@@ -142,10 +156,10 @@ export const Omni = () => {
   }, [])
 
   const onTab = useCallback(() => {
-    console.log('TAB');
-  }, [])
+    maybeAcceptInlineAutocomplete();
+  }, [maybeAcceptInlineAutocomplete])
 
-  const onKeyDown = useCallback((event: React.KeyboardEvent) => {
+  const onKeyDown = useCallback((event: React.KeyboardEvent, value: string, cursorAtEndPosition: boolean) => {
     switch (event.key) {
       case key.ARROW_UP:
         event.preventDefault();
@@ -155,12 +169,15 @@ export const Omni = () => {
         event.preventDefault();
         onArrowDown();
         break;
+      case key.ARROW_RIGHT:
+        cursorAtEndPosition && maybeAcceptInlineAutocomplete();
+        break;        
       case key.ESCAPE:
         event.preventDefault();
         onEscape();
         break;
     }
-  }, [onArrowUp, onArrowDown, onEscape])
+  }, [onArrowUp, onArrowDown, maybeAcceptInlineAutocomplete, onEscape])
 
   const onChange = useCallback((_, value: string) => {
     currentValue.current = value;
