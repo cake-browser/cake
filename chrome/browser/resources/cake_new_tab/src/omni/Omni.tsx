@@ -14,30 +14,40 @@ import { getProxy, ProxyEvent } from '../proxy.js';
 import { SearchResult } from './SearchResult.js';
 import { InlineAutocomplete, InlineAutocompleteHandle, InlineAutocompleteProps } from './InlineAutocomplete.js';
 import { applyCustomSortAndFilterRules } from './utils.js';
-// import { results } from '../dev/data/search.js';
+import { key } from '../utils/keyboard.js';
+import { results } from '../dev/data/search.js';
 
 const baseClass = 'omni';
 const pcn = getPCN(baseClass);
 const placeholder = 'Do something magical...';
+
+type SearchResultsState = {
+  results: OmniSearchResultMatch[];
+  focusedIndex: number;
+}
 
 const formatSearchResultKey = (result: OmniSearchResultMatch, index: number): string => {
   const { type, contents, description } = result;
   return [index, type, contents, description].join('-');
 }
 
+const SEARCH_RESULT_HEIGHT = 44;
+const SEARCH_RESULTS_PER_PAGE = 4;
+
 /**
  * Omni input component.
  */
 export const Omni = () => {
   const [animatedIn, setAnimatedIn] = useState<boolean>(false);
-  const [searchResults, setSearchResults] = useState<OmniSearchResultMatch[]>([]);
-  const [focusedSearchResultIndex, setFocusedSearchResultIndex] = useState<number>(0);
+  const [searchResultsState, setSearchResultsState] = useState<SearchResultsState>({
+    results: [],
+    focusedIndex: 0,
+  });
   const inlineAutocompleteRef = useRef<InlineAutocompleteHandle>(null);
   const lastRequestQuery = useRef<string>('');
   const currentValue = useRef<string>('');
   const nextInlineAutocompleteProps = useRef<InlineAutocompleteProps | null>(null);
   const searchResultsLinerRef = useRef<HTMLDivElement>(null);
-  const shouldScrollToSearchResultsTop = useRef<boolean>(false);
   
   /**
    * = Actions ---------------------
@@ -47,21 +57,20 @@ export const Omni = () => {
     lastRequestQuery.current = value;
     getProxy().startOmniboxQuery(value);
 
-    // setSearchResults(results);
+    let inputText = '';
+    let completionText = '';
+    const showInlineAutocomplete = (
+      results.length && 
+      !results[0].isSearchType && 
+      !!results[0].inlineAutocompletion
+    );
+    if (showInlineAutocomplete) {
+      inputText = currentValue.current;
+      completionText = results[0].inlineAutocompletion;
+    }
+    nextInlineAutocompleteProps.current = { inputText, completionText };
 
-    // // Update inline autocomplete.
-    // let inputText = '';
-    // let completionText = '';
-    // const showInlineAutocomplete = (
-    //   results.length && 
-    //   !results[0].isSearchType && 
-    //   !!results[0].inlineAutocompletion
-    // );
-    // if (showInlineAutocomplete) {
-    //   inputText = currentValue.current;
-    //   completionText = results[0].inlineAutocompletion;
-    // }
-    // inlineAutocompleteRef.current?.update({ inputText, completionText });
+    setSearchResultsState({ results, focusedIndex: 0 });
   }, [])
 
   /**
@@ -92,14 +101,66 @@ export const Omni = () => {
 
     // For next render.
     nextInlineAutocompleteProps.current = { inputText, completionText };
-    shouldScrollToSearchResultsTop.current = true;
 
-    setSearchResults(results);
+    setSearchResultsState({ results, focusedIndex: 0 });
   }, [])
 
   /**
    * = Event Handlers ----------------
    */
+
+  const onArrowUp = useCallback(() => {
+    setSearchResultsState(prevState => {
+      const { results, focusedIndex: currentIndex } = prevState;
+      if (results.length <= 1) return prevState;
+
+      let newIndex = currentIndex - 1;
+      if (newIndex < 0) {
+        newIndex = results.length - 1;
+      }
+
+      return { results, focusedIndex: newIndex };
+    });
+  }, [])
+
+  const onArrowDown = useCallback(() => {
+    setSearchResultsState(prevState => {
+      const { results, focusedIndex: currentIndex } = prevState;
+      if (results.length <= 1) return prevState;
+
+      let newIndex = currentIndex + 1;
+      if (newIndex >= results.length) {
+        newIndex = 0;
+      }
+
+      return { results, focusedIndex: newIndex };
+    });
+  }, [])
+
+  const onEscape = useCallback(() => {
+    console.log('ESCAPE');
+  }, [])
+
+  const onTab = useCallback(() => {
+    console.log('TAB');
+  }, [])
+
+  const onKeyDown = useCallback((event: React.KeyboardEvent) => {
+    switch (event.key) {
+      case key.ARROW_UP:
+        event.preventDefault();
+        onArrowUp();
+        break;
+      case key.ARROW_DOWN:
+        event.preventDefault();
+        onArrowDown();
+        break;
+      case key.ESCAPE:
+        event.preventDefault();
+        onEscape();
+        break;
+    }
+  }, [onArrowUp, onArrowDown, onEscape])
 
   const onChange = useCallback((_, value: string) => {
     currentValue.current = value;
@@ -110,7 +171,7 @@ export const Omni = () => {
     } else {
       lastRequestQuery.current = '';
       nextInlineAutocompleteProps.current = { inputText: '', completionText: '' };
-      setSearchResults([]);
+      setSearchResultsState({ results: [], focusedIndex: 0 });
     }
   }, [performSearch])
 
@@ -144,17 +205,49 @@ export const Omni = () => {
   })
 
   useEffect(() => {
-    if (shouldScrollToSearchResultsTop.current) {
-      searchResultsLinerRef.current?.scrollTo({ top: 0 });
-      shouldScrollToSearchResultsTop.current = false;
+    const containerElement = searchResultsLinerRef.current;
+    const focusedElement = containerElement?.children[searchResultsState.focusedIndex] as HTMLElement;
+    
+    if (!containerElement || !focusedElement) return;
+
+    const containerClientRect = containerElement.getBoundingClientRect();
+    const containerRect = { 
+      top: containerClientRect.top,
+      height: containerClientRect.height,
+      bottom: containerClientRect.bottom
+    };
+    containerRect.top += SEARCH_RESULT_HEIGHT / 2;
+    containerRect.height = SEARCH_RESULT_HEIGHT * SEARCH_RESULTS_PER_PAGE;
+    containerRect.bottom = containerRect.top + containerRect.height;
+    const elementRect = focusedElement.getBoundingClientRect();
+
+    // Calculate if element is outside visible area
+    const isAbove = elementRect.top < containerRect.top;
+    const isBelow = elementRect.bottom > containerRect.bottom;
+
+    if (isAbove || isBelow) {
+      // Calculate the new scroll position
+      const elementRelativeTop = elementRect.top - containerRect.top;
+      const currentScroll = containerElement.scrollTop;
+      
+      let newScrollTop;
+      if (isAbove) {
+        // Scroll up to bring element to top
+        newScrollTop = currentScroll + elementRelativeTop;
+      } else {
+        // Scroll down to bring element to bottom
+        newScrollTop = currentScroll + (elementRelativeTop - containerRect.height + elementRect.height);
+      }
+
+      console.log('newScrollTop', newScrollTop, newScrollTop / SEARCH_RESULT_HEIGHT);
+
+      containerElement.scrollTo({ top: newScrollTop });
     }
-  })
+  }, [searchResultsState.focusedIndex])
 
   /**
    * = Rendering ---------------------
    */
-
-  console.log(searchResults);
 
   return (
     <div className={cn(baseClass, animatedIn ? pcn('--show') : '')}>
@@ -169,6 +262,8 @@ export const Omni = () => {
           autoFocus={true}
           size='md'
           placeholder={placeholder}
+          onKeyDown={onKeyDown}
+          onTab={onTab}
           onChange={onChange}
           onSubmit={onSubmit}
         />
@@ -176,11 +271,11 @@ export const Omni = () => {
       </div>
       <div className={pcn('__search-results')}>
         <div className={pcn('__search-results-liner')} ref={searchResultsLinerRef}>
-          { searchResults.map((r, i) => (
+          { searchResultsState.results.map((r, i) => (
             <SearchResult
               key={formatSearchResultKey(r, i)}
               result={r}
-              focused={focusedSearchResultIndex === i}
+              focused={searchResultsState.focusedIndex === i}
             />
           ))}
         </div>

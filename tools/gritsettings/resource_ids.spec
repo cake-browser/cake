@@ -653,7 +653,7 @@
     "includes": [5220],
   },
   "<(SHARED_INTERMEDIATE_DIR)/chrome/browser/resources/cake_new_tab/resources.grd": {
-    "META": {"sizes": {"includes": [21]}},
+    "META": {"sizes": {"includes": [22]}},
     "includes": [5240],
   },
   # END chrome/ WebUI resources section

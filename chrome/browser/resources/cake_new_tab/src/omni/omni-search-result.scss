@@ -1,4 +1,4 @@
-$omni-search-result-focus-transition-duration: 0.05s;
+$omni-search-result-focus-transition-duration: 0s;
 $omni-search-result-icon-text-spacing: 15px;
 $omni-search-result-title-max-width: 60%;
 $omni-search-result-title-font-size: 12px;
@@ -16,7 +16,7 @@ $omni-search-result-annotation-divider-opacity: 0.065;
   &.omni-search-result--search-type {
     .omni-search-result__annotation > span {
       opacity: 0;
-      transition: opacity .12s ease;
+      transition: opacity 0s ease;
     }
   }
 
@@ -28,7 +28,6 @@ $omni-search-result-annotation-divider-opacity: 0.065;
 
     .omni-search-result__icon {
       img {
-        filter: brightness(1);
         opacity: 1;
       }
 
@@ -88,7 +87,6 @@ $omni-search-result-annotation-divider-opacity: 0.065;
   img {
     width: 100%;
     height: auto;
-    filter: brightness(0.975);
     opacity: 0.66;
     transition: opacity $omni-search-result-focus-transition-duration ease, filter $omni-search-result-focus-transition-duration ease;
   }

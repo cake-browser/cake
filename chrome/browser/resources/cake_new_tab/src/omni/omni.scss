@@ -123,7 +123,7 @@ $omni-max-search-results-height: calc((#{$omni-search-result-height} * #{$omni-m
     bottom: 0;
     left: -5px;
     right: -5px;
-    height: calc(#{$omni-search-result-height} + #{$omni-search-results-overhang-offset} + 2px);
+    height: calc(#{$omni-search-result-height} + #{$omni-search-results-overhang-offset} + 8px);
     background-image: linear-gradient(to top, var(--primary-color), var(--primary-color) $omni-search-results-overhang-offset, rgba(var(--primary-rgb), 0.5) 80%, transparent);
     z-index: 1;
     pointer-events: none;

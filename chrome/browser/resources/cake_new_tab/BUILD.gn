@@ -42,6 +42,7 @@ build_webui("build") {
     "src/proxy.ts",
     "src/utils/cn.ts",
     "src/utils/url.ts",
+    "src/utils/keyboard.ts",
     "src/omni/types.ts",
     "src/omni/utils.ts",
     "src/omni/overrides.ts",
