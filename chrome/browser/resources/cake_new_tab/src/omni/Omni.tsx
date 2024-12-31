@@ -15,7 +15,7 @@ import { SearchResult } from './SearchResult.js';
 import { InlineAutocomplete, InlineAutocompleteHandle, InlineAutocompleteProps } from './InlineAutocomplete.js';
 import { applyCustomSortAndFilterRules } from './utils.js';
 import { key } from '../utils/keyboard.js';
-// import { results } from '../dev/data/search.js';
+// import { results as fakeResults } from '../dev/data/search.js';
 
 const baseClass = 'omni';
 const pcn = getPCN(baseClass);
@@ -33,6 +33,7 @@ const formatSearchResultKey = (result: OmniSearchResultMatch, index: number): st
 
 const SEARCH_RESULT_HEIGHT = 44;
 const SEARCH_RESULTS_PER_PAGE = 4;
+const MAX_WORDS_FOR_SEARCH_SUGGESTIONS = 4;
 
 /**
  * Omni input component.
@@ -41,6 +42,7 @@ export const Omni = () => {
   // State
   const [_, forceRender] = useState<boolean>(false);
   const [animatedIn, setAnimatedIn] = useState<boolean>(false);
+  const [useMultilineStyle, setUseMultilineStyle] = useState<boolean>(false);
   const [searchResultsState, setSearchResultsState] = useState<SearchResultsState>({
     results: [],
     focusedIndex: 0,
@@ -54,6 +56,7 @@ export const Omni = () => {
   const searchResultsLinerRef = useRef<HTMLDivElement>(null);
   const lastSearchResultsCount = useRef<number>(0);
   const showSearchResults = useRef<boolean>(false);
+  const forceHideSearchResults = useRef<boolean>(false);
   
   /**
    * = Actions ---------------------
@@ -63,20 +66,8 @@ export const Omni = () => {
     lastRequestQuery.current = value;
     getProxy().startOmniboxQuery(value);
 
-    // let inputText = '';
-    // let completionText = '';
-    // const showInlineAutocomplete = (
-    //   results.length && 
-    //   !results[0].isSearchType && 
-    //   !!results[0].inlineAutocompletion
-    // );
-    // if (showInlineAutocomplete) {
-    //   inputText = currentValue.current;
-    //   completionText = results[0].inlineAutocompletion;
-    // }
-    // nextInlineAutocompleteProps.current = { inputText, completionText };
-
-    // setSearchResultsState({ results, focusedIndex: 0 });
+    // HACK for local dev.
+    // setSearchResultsState({ results: fakeResults, focusedIndex: 0 });
   }, [])
 
   const maybeAcceptInlineAutocomplete = useCallback(() => {
@@ -108,11 +99,20 @@ export const Omni = () => {
     nextInlineAutocompleteProps.current = { inputText, completionText };
   }, [])
 
+  const hideSearchResults = useCallback(() => {
+    nextInlineAutocompleteProps.current = { inputText: '', completionText: '' };
+    if (!showSearchResults.current) return;
+    showSearchResults.current = false;
+    setSearchResultsState({ results: [], focusedIndex: 0 });
+  }, []);
+
   /**
    * = Proxy Handlers --------------
    */
 
   const onAutocompleteResponse = useCallback((_, response: OmniboxResponse) => {
+    if (useMultilineStyle || forceHideSearchResults.current) return;
+
     const isForLastRequest = response.inputText === lastRequestQuery.current;
     const valueHasSinceChanged = response.inputText !== currentValue.current.trim();
     if (!isForLastRequest || valueHasSinceChanged) return;
@@ -131,7 +131,7 @@ export const Omni = () => {
 
     setNextInlineAutoComplete(results, 0);
     setSearchResultsState({ results, focusedIndex: 0 });
-  }, [setNextInlineAutoComplete])
+  }, [setNextInlineAutoComplete, useMultilineStyle])
 
   /**
    * = Event Handlers ----------------
@@ -170,8 +170,9 @@ export const Omni = () => {
   }, [setNextInlineAutoComplete])
 
   const onEscape = useCallback(() => {
-    console.log('ESCAPE');
-  }, [])
+    forceHideSearchResults.current = true;
+    hideSearchResults();
+  }, [hideSearchResults])
 
   const onTab = useCallback(() => {
     maybeAcceptInlineAutocomplete();
@@ -180,10 +181,12 @@ export const Omni = () => {
   const onKeyDown = useCallback((event: React.KeyboardEvent, value: string, cursorAtEndPosition: boolean) => {
     switch (event.key) {
       case key.ARROW_UP:
+        if (useMultilineStyle) return;
         event.preventDefault();
         onArrowUp();
         break;
       case key.ARROW_DOWN:
+        if (useMultilineStyle) return;
         event.preventDefault();
         onArrowDown();
         break;
@@ -195,21 +198,42 @@ export const Omni = () => {
         onEscape();
         break;
     }
-  }, [onArrowUp, onArrowDown, maybeAcceptInlineAutocomplete, onEscape])
+  }, [onArrowUp, onArrowDown, maybeAcceptInlineAutocomplete, onEscape, useMultilineStyle])
 
-  const onChange = useCallback((_, value: string) => {
+  const onChange = useCallback((_, value: string, lineCount: number) => {
     currentValue.current = value;
-    value = value.trim();
 
-    if (value) {
-      performSearch(value);
-    } else {
-      lastRequestQuery.current = '';
-      nextInlineAutocompleteProps.current = { inputText: '', completionText: '' };
-      showSearchResults.current = false;
-      setSearchResultsState({ results: [], focusedIndex: 0 });
+    // Switch to multiline style if needed.
+    if (lineCount > 1) {
+      hideSearchResults();
+      useMultilineStyle || setUseMultilineStyle(true);
+      return;
     }
-  }, [performSearch])
+
+    // Hide search results if there are too many words.
+    const numWords = value.split(' ').filter(w => !!w).length;
+    if (numWords > MAX_WORDS_FOR_SEARCH_SUGGESTIONS) {
+      hideSearchResults();
+      return;
+    }
+
+    // Perform search if value exists.
+    value = value.trim();
+    if (value) {
+      !forceHideSearchResults.current && performSearch(value);
+      return;
+    }
+
+    // Handle empty input.
+    lastRequestQuery.current = '';
+    hideSearchResults();
+  }, [useMultilineStyle, performSearch, hideSearchResults])
+
+  const onEmptyShiftEnter = useCallback(() => {
+    forceHideSearchResults.current = true;
+    hideSearchResults();
+    useMultilineStyle || setUseMultilineStyle(true);
+  }, [hideSearchResults, useMultilineStyle]);
 
   const onSubmit = useCallback((value: string) => {
     console.log('SUBMIT', value);
@@ -301,10 +325,14 @@ export const Omni = () => {
    * = Rendering ---------------------
    */
 
-  console.log(searchResultsState.results);
+  const classes = cn(
+    baseClass,
+    animatedIn ? pcn('--show') : '',
+    useMultilineStyle ? pcn('--multiline') : '',
+  );
 
   return (
-    <div className={cn(baseClass, animatedIn ? pcn('--show') : '')}>
+    <div className={classes}>
       <div className={pcn('__input-bar')}>
         <Icon 
           icon='search'
@@ -313,13 +341,15 @@ export const Omni = () => {
         />
         <ChatInput
           id={baseClass}
-          autoFocus={true}
           size='md'
+          autoFocus={true}
+          isMultiline={useMultilineStyle}
           placeholder={placeholder}
           onKeyDown={onKeyDown}
           onTab={onTab}
           onChange={onChange}
           onSubmit={onSubmit}
+          onEmptyShiftEnter={onEmptyShiftEnter}
         />
         <InlineAutocomplete ref={inlineAutocompleteRef} />
       </div>

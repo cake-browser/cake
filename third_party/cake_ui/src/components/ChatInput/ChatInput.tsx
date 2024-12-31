@@ -24,17 +24,21 @@ const pcn = getPCN(baseClass);
 const theme = {};
 
 const KeyPressPlugin = ({
+  isMultiline,
   onKeyDown,
   onChange,
   onNewLineCount,
   onTab,
   onSubmit,
+  onEmptyShiftEnter,
 }: {
+  isMultiline: boolean;
   onKeyDown?: (event: React.KeyboardEvent, value: string, cursorAtEndPosition: boolean) => void;
   onChange?: (event: React.KeyboardEvent, value: string, lineCount: number) => void;
   onNewLineCount?: (lineCount: number) => void;
   onTab?: (value: string) => void;
   onSubmit?: (value: string) => void;
+  onEmptyShiftEnter?: () => void;
 }) => {
   const [editor] = useLexicalComposerContext();
   const lastKeyDownEvent = useRef<React.KeyboardEvent | null>(null);
@@ -48,7 +52,8 @@ const KeyPressPlugin = ({
       (event: React.KeyboardEvent) => {
         lastKeyDownEvent.current = event;
 
-        const bubbleUp = (submit: boolean, tab: boolean) => {
+        // Empty shift-enter.
+        if (event.key === key.ENTER && event.shiftKey && !isMultiline) {
           editor.getEditorState().read(() => {
             const root = $getRoot();
             const value = root.getTextContent();
@@ -57,26 +62,55 @@ const KeyPressPlugin = ({
               ? selection.anchor.offset === value.length
               : false;
             onKeyDown?.(event, value, cursorAtEndPosition);
-            submit && onSubmit?.(value);
-            tab && onTab?.(value);
-          });
-        };
 
-        // SUBMIT.
-        if (event.key === key.ENTER && !event.shiftKey && onSubmit) {
-          event.preventDefault();
-          bubbleUp(true, false);
+            if (!value) {
+              event.preventDefault();
+              onEmptyShiftEnter?.();
+            }
+          });
           return true; // stop propagation
         }
 
-        // TAB.
+        // Submit.
+        if (event.key === key.ENTER && !event.shiftKey && !isMultiline && onSubmit) {
+          event.preventDefault();
+          editor.getEditorState().read(() => {
+            const root = $getRoot();
+            const value = root.getTextContent();
+            const selection = $getSelection() as RangeSelection;
+            const cursorAtEndPosition = selection
+              ? selection.anchor.offset === value.length
+              : false;
+            onKeyDown?.(event, value, cursorAtEndPosition);
+            onSubmit?.(value);
+          });
+          return true; // stop propagation
+        }
+
+        // Tab.
         if (event.key === key.TAB && onTab) {
           event.preventDefault();
-          bubbleUp(false, true);
+          editor.getEditorState().read(() => {
+            const root = $getRoot();
+            const value = root.getTextContent();
+            const selection = $getSelection() as RangeSelection;
+            const cursorAtEndPosition = selection
+              ? selection.anchor.offset === value.length
+              : false;
+            onKeyDown?.(event, value, cursorAtEndPosition);
+            onTab?.(value);
+          });
           return true;
         }
 
-        bubbleUp(false, false);
+        // Bubble up event.
+        editor.getEditorState().read(() => {
+          const root = $getRoot();
+          const value = root.getTextContent();
+          const selection = $getSelection() as RangeSelection;
+          const cursorAtEndPosition = selection ? selection.anchor.offset === value.length : false;
+          onKeyDown?.(event, value, cursorAtEndPosition);
+        });
         return false;
       },
       COMMAND_PRIORITY_NORMAL
@@ -111,7 +145,16 @@ const KeyPressPlugin = ({
       keyDownUnregister();
       changeUnregister?.();
     };
-  }, [editor, onKeyDown, onChange, onSubmit]);
+  }, [
+    editor,
+    isMultiline,
+    onKeyDown,
+    onChange,
+    onNewLineCount,
+    onTab,
+    onSubmit,
+    onEmptyShiftEnter,
+  ]);
 
   return null;
 };
@@ -123,11 +166,13 @@ export type ChatInputProps = {
   size?: ChatInputSize;
   placeholder?: string;
   autoFocus?: boolean;
+  isMultiline?: boolean;
   onKeyDown?: (event: React.KeyboardEvent, value: string, cursorAtEndPosition: boolean) => void;
   onChange?: (event: React.KeyboardEvent, value: string, lineCount: number) => void;
   onNewLineCount?: (lineCount: number) => void;
   onTab?: (value: string) => void;
   onSubmit?: (value: string) => void;
+  onEmptyShiftEnter?: () => void;
   onError?: (err: Error) => void;
 };
 
@@ -136,11 +181,13 @@ export const ChatInput = ({
   size = 'sm',
   placeholder = '',
   autoFocus = false,
+  isMultiline = false,
   onKeyDown,
   onChange,
   onNewLineCount,
   onTab,
   onSubmit,
+  onEmptyShiftEnter,
   onError = (err: Error) => console.error(err),
 }: ChatInputProps) => {
   const initialConfig = {
@@ -168,11 +215,13 @@ export const ChatInput = ({
         <HistoryPlugin />
         {autoFocus && <AutoFocusPlugin />}
         <KeyPressPlugin
+          isMultiline={isMultiline}
           onKeyDown={onKeyDown}
           onChange={onChange}
           onNewLineCount={onNewLineCount}
           onTab={onTab}
           onSubmit={onSubmit}
+          onEmptyShiftEnter={onEmptyShiftEnter}
         />
       </LexicalComposer>
     </div>
