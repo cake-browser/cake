@@ -2,6 +2,7 @@
   @include iflex-container;
   @include button;
   flex-shrink: 0;
+  transition: all var(--default-button-transition-duration) var(--default-button-transition-timing);
 
   svg {
     display: inline-block;
@@ -11,13 +12,14 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    transition: stroke var(--default-button-transition-duration) var(--default-button-transition-timing);
   }
 
   // -- Size ----------
 
   &.ck-icon--tiny {
-    width: calc(var(--icon-tiny) + (2 *var(--spacing-md)));
-    height: calc(var(--icon-tiny) + (2 *var(--spacing-md)));
+    width: calc(var(--icon-tiny) + (2 * var(--spacing-md)));
+    height: calc(var(--icon-tiny) + (2 * var(--spacing-md)));
 
     svg {
       width: var(--icon-tiny);
@@ -25,8 +27,8 @@
   }
 
   &.ck-icon--xs {
-    width: calc(var(--icon-xs) + (2 *var(--spacing-md)));
-    height: calc(var(--icon-xs) + (2 *var(--spacing-md)));
+    width: calc(var(--icon-xs) + (2 * var(--spacing-md)));
+    height: calc(var(--icon-xs) + (2 * var(--spacing-md)));
 
     svg {
       width: var(--icon-xs);
@@ -34,8 +36,8 @@
   }
 
   &.ck-icon--sm {
-    width: calc(var(--icon-sm) + (2 *var(--spacing-md)));
-    height: calc(var(--icon-sm) + (2 *var(--spacing-md)));
+    width: calc(var(--icon-sm) + (2 * var(--spacing-md)));
+    height: calc(var(--icon-sm) + (2 * var(--spacing-md)));
 
     svg {
       width: var(--icon-sm);
@@ -43,8 +45,8 @@
   }
 
   &.ck-icon--md {
-    width: calc(var(--icon-md) + (2 *var(--spacing-md)));
-    height: calc(var(--icon-md) + (2 *var(--spacing-md)));
+    width: calc(var(--icon-md) + (2 * var(--spacing-md)));
+    height: calc(var(--icon-md) + (2 * var(--spacing-md)));
 
     svg {
       width: var(--icon-md);
@@ -52,8 +54,8 @@
   }
 
   &.ck-icon--lg {
-    width: calc(var(--icon-lg) + (2 *var(--spacing-md)));
-    height: calc(var(--icon-lg) + (2 *var(--spacing-md)));
+    width: calc(var(--icon-lg) + (2 * var(--spacing-md)));
+    height: calc(var(--icon-lg) + (2 * var(--spacing-md)));
 
     svg {
       width: var(--icon-lg);
@@ -61,8 +63,8 @@
   }
 
   &.ck-icon--xl {
-    width: calc(var(--icon-xl) + (2 *var(--spacing-md)));
-    height: calc(var(--icon-xl) + (2 *var(--spacing-md)));
+    width: calc(var(--icon-xl) + (2 * var(--spacing-md)));
+    height: calc(var(--icon-xl) + (2 * var(--spacing-md)));
 
     svg {
       width: var(--icon-xl);

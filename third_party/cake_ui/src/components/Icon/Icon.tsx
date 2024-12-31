@@ -1,6 +1,6 @@
 import { icons } from './icons';
 import { cn } from '../../utils/cn';
-import { React } from '../../deps/react';
+import { React, forwardRef, useImperativeHandle, useRef } from '../../deps/react';
 
 const baseClass = 'ck-icon';
 
@@ -17,19 +17,30 @@ export type IconProps = React.HTMLAttributes<HTMLButtonElement> & {
   attention?: IconAttention;
   options?: string[];
 };
-[];
 
-export const Icon = ({
-  icon,
-  className,
-  options = [],
-  size = 'sm',
-  shape = 'circle',
-  attention = 'moderate',
-  tabIndex = -1,
-  style = {},
-  ...props
-}: IconProps) => {
+export type IconHandle = {
+  focus: () => void;
+};
+
+export const Icon = forwardRef<IconHandle, IconProps>((iconProps, ref) => {
+  const {
+    icon,
+    className,
+    options = [],
+    size = 'sm',
+    shape = 'circle',
+    attention = 'moderate',
+    tabIndex = -1,
+    style = {},
+    ...props
+  } = iconProps;
+
+  const buttonRef = useRef<HTMLButtonElement>(null);
+
+  useImperativeHandle(ref, () => ({
+    focus: () => buttonRef.current && buttonRef.current.focus(),
+  }));
+
   if (!options.length) {
     options.push(icon);
   }
@@ -47,11 +58,11 @@ export const Icon = ({
   style.cursor = props.onClick ? 'pointer' : 'default';
 
   return (
-    <button className={classes} tabIndex={tabIndex} style={style} {...props}>
+    <button className={classes} tabIndex={tabIndex} style={style} ref={buttonRef} {...props}>
       {options.map((option) => {
         const SvgIcon = icons[option];
         return <SvgIcon key={option} style={{ opacity: option === icon ? 1 : 0 }} />;
       })}
     </button>
   );
-};
+});

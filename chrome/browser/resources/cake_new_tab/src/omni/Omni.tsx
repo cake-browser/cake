@@ -36,7 +36,7 @@ const SEARCH_RESULTS_PER_PAGE = 4;
 const MAX_WORDS_FOR_SEARCH_SUGGESTIONS = 4;
 
 /**
- * Omni input component.
+ * An everything input.
  */
 export const Omni = () => {
   // State
@@ -57,6 +57,7 @@ export const Omni = () => {
   const lastSearchResultsCount = useRef<number>(0);
   const showSearchResults = useRef<boolean>(false);
   const forceHideSearchResults = useRef<boolean>(false);
+  const multilineSubmitButtonRef = useRef<HTMLButtonElement>(null);
   
   /**
    * = Actions ---------------------
@@ -175,8 +176,12 @@ export const Omni = () => {
   }, [hideSearchResults])
 
   const onTab = useCallback(() => {
-    maybeAcceptInlineAutocomplete();
-  }, [maybeAcceptInlineAutocomplete])
+    if (useMultilineStyle) {
+      multilineSubmitButtonRef.current?.focus();
+    } else {
+      maybeAcceptInlineAutocomplete(); // TODO: Come back to this.
+    }
+  }, [maybeAcceptInlineAutocomplete, useMultilineStyle])
 
   const onKeyDown = useCallback((event: React.KeyboardEvent, value: string, cursorAtEndPosition: boolean) => {
     switch (event.key) {
@@ -203,28 +208,28 @@ export const Omni = () => {
   const onChange = useCallback((_, value: string, lineCount: number) => {
     currentValue.current = value;
 
-    // Switch to multiline style if needed.
+    // Switch to multiline.
     if (lineCount > 1) {
       hideSearchResults();
       useMultilineStyle || setUseMultilineStyle(true);
       return;
     }
 
-    // Hide search results if there are too many words.
+    // Hide search.
     const numWords = value.split(' ').filter(w => !!w).length;
     if (numWords > MAX_WORDS_FOR_SEARCH_SUGGESTIONS) {
       hideSearchResults();
       return;
     }
 
-    // Perform search if value exists.
+    // Perform search.
     value = value.trim();
     if (value) {
-      !forceHideSearchResults.current && performSearch(value);
+      !forceHideSearchResults.current && !useMultilineStyle && performSearch(value);
       return;
     }
 
-    // Handle empty input.
+    // Empty input.
     lastRequestQuery.current = '';
     hideSearchResults();
   }, [useMultilineStyle, performSearch, hideSearchResults])
@@ -362,6 +367,25 @@ export const Omni = () => {
               focused={searchResultsState.focusedIndex === i}
             />
           ))}
+        </div>
+      </div>
+      <div className={pcn('__multiline-control-bar')}>
+        <div className={pcn('__multiline-control-bar-liner')}>
+          <Icon
+            icon='arrow-right'
+            size='xs'
+            attention='moderate'
+            tabIndex={1}
+            onClick={() => onSubmit(currentValue.current)}
+            ref={multilineSubmitButtonRef}
+          />
+          <Icon
+            icon='at'
+            size='xs'
+            attention='moderate'
+            tabIndex={2}
+            onClick={() => {}}
+          />
         </div>
       </div>
     </div>

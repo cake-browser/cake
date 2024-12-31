@@ -1,4 +1,4 @@
-import { IconSearch, IconWorld } from '@tabler/icons-react';
+import { IconSearch, IconWorld, IconAt, IconArrowRight } from '@tabler/icons-react';
 import { React } from '../../deps/react';
 
 const githubSvg = (style: React.CSSProperties = {}) => (
@@ -12,9 +12,11 @@ const githubSvg = (style: React.CSSProperties = {}) => (
 );
 
 const icons = {
+  'arrow-right': IconArrowRight,
+  at: IconAt,
+  github: githubSvg,
   search: IconSearch,
   world: IconWorld,
-  github: githubSvg,
 };
 
 export { icons };

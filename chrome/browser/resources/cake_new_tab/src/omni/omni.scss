@@ -8,6 +8,9 @@ $omni-search-result-height: 44px;
 $omni-search-results-overhang-offset: calc(#{$omni-search-result-height} / 2);
 $omni-max-search-results-in-view: 5;
 $omni-max-search-results-height: calc((#{$omni-search-result-height} * #{$omni-max-search-results-in-view}) + (2 * #{$omni-search-results-overhang-offset}));
+$omni-multiline-control-icon-spacing: 12px;
+$omni-multiline-control-bar-bottom-offset: 80px;
+$omni-multiline-control-bar-transition-duration: .9s;
 
 .omni {
   @include flex-container;
@@ -16,14 +19,14 @@ $omni-max-search-results-height: calc((#{$omni-search-result-height} * #{$omni-m
   &.omni--show {
     .omni__input-bar {
       filter: blur(0px);
-    }
 
-    .ck-icon {
-      transform: scale(1);
-      opacity: 1;
-
-      svg {
+      .ck-icon {
+        transform: scale(1);
         opacity: 1;
+
+        svg {
+          opacity: 1;
+        }
       }
     }
 
@@ -42,10 +45,16 @@ $omni-max-search-results-height: calc((#{$omni-search-result-height} * #{$omni-m
   }
 
   &.omni--multiline {
-    .ck-icon {
-      transition: all 0.05s var(--tt-ease);
-      opacity: 0;
-      transform: scale(0.8);
+    .omni__input-bar {
+      .ck-icon {
+        transition: all 0.05s var(--tt-ease);
+        opacity: 0;
+        transform: scale(0.8);
+      }
+    }
+
+    .omni__multiline-control-bar {
+      opacity: 1;
     }
   }
 }
@@ -168,5 +177,42 @@ $omni-max-search-results-height: calc((#{$omni-search-result-height} * #{$omni-m
 
   &::-webkit-scrollbar {
     display: none;
+  }
+}
+
+.omni__multiline-control-bar {
+  display: inline-block;
+  height: 30px;
+  position: absolute;
+  bottom: $omni-multiline-control-bar-bottom-offset;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-left: -5px;
+  z-index: 10;
+  opacity: 0;
+  transition: opacity $omni-multiline-control-bar-transition-duration var(--tt-ease);
+}
+
+.omni__multiline-control-bar-liner {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+
+  .ck-icon {
+    svg {
+      stroke-width: 1.8;
+    }
+
+    &:not(:last-child) {
+      margin-right: $omni-multiline-control-icon-spacing;
+    }
+
+    &:hover,
+    &:focus {
+      background-color: var(--accent-color);
+      color: var(--accent-overlay-color);
+    }
   }
 }

@@ -60,4 +60,6 @@
 
   // Transitions:
   --tt-ease: cubic-bezier(.28,.35,.35,1);
+  --default-button-transition-timing: ease;
+  --default-button-transition-duration: 0.1s;
 }
