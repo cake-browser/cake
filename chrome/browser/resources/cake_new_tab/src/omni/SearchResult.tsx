@@ -15,9 +15,14 @@ const pcn = getPCN(baseClass);
 export type OmniresultProps = {
   result: OmniSearchResultMatch;
   focused: boolean;
+  onClick?: () => void;
 }
 
-export const SearchResult = ({ result, focused }: OmniresultProps) => {
+export const SearchResult = ({ 
+  result,
+  focused, 
+  onClick = () => {},
+}: OmniresultProps) => {
   const {
     type,
     isSearchType,
@@ -115,7 +120,7 @@ export const SearchResult = ({ result, focused }: OmniresultProps) => {
   );
 
   return (
-    <div className={classes}>
+    <div className={classes} onClick={onClick}>
       <div className={pcn('__liner')}>
         {renderIcon()}
         {renderTitle()}

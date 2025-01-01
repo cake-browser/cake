@@ -7,10 +7,15 @@ $omni-inline-autocomplete-height: 24.5px;
   left: calc(#{$omni-input-icon-size} + #{$omni-chat-input-left-spacing});
   top: calc((#{$omni-input-icon-size} - #{$omni-inline-autocomplete-height}) / 2);
   height: $omni-inline-autocomplete-height;
+  max-width: calc(100% - (2 * (#{$omni-input-icon-size} + #{$omni-chat-input-left-spacing})));
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   font-family: Regular;
   font-size: var(--font-size-md);
   line-height: var(--line-height-md);
   pointer-events: none;
+  color: rgba(var(--tertiary-rgb), 0.22);
 
   span {
     font-family: inherit;
@@ -22,7 +27,7 @@ $omni-inline-autocomplete-height: 24.5px;
     }
 
     &:last-child {
-      color: rgba(var(--tertiary-rgb), 0.22);
+      color: inherit;
     }
   }
 }

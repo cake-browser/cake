@@ -98,20 +98,20 @@ $omni-search-result-annotation-divider-opacity: 0.065;
   img {
     width: 100%;
     height: auto;
-    opacity: 0.66;
+    opacity: 0.64;
     transition: opacity $omni-search-result-focus-transition-duration ease, filter $omni-search-result-focus-transition-duration ease;
   }
 
   svg {
     width: calc(var(--icon-sm) - 1px);
     height: auto;
-    stroke: rgba(var(--tertiary-rgb), 0.55);
+    stroke: rgba(var(--tertiary-rgb), 0.54);
     will-change: stroke, stroke-width, fill;
     transition: all $omni-search-result-focus-transition-duration ease;
 
     &.--fill {
       stroke: none;
-      fill: rgba(var(--tertiary-rgb), 0.55);
+      fill: rgba(var(--tertiary-rgb), 0.54);
     }
   }
 }
@@ -125,7 +125,7 @@ $omni-search-result-annotation-divider-opacity: 0.065;
   font-size: $omni-search-result-title-font-size;
   margin-left: $omni-search-result-icon-text-spacing;
   color: var(--secondary-color);
-  opacity: 0.68;
+  opacity: 0.64;
   transition: opacity $omni-search-result-focus-transition-duration ease;
 }
 

@@ -25,6 +25,7 @@ const theme = {};
 
 const KeyPressPlugin = ({
   isMultiline,
+  hasDetectedDestinationUrl,
   onKeyDown,
   onChange,
   onNewLineCount,
@@ -33,6 +34,7 @@ const KeyPressPlugin = ({
   onEmptyShiftEnter,
 }: {
   isMultiline: boolean;
+  hasDetectedDestinationUrl?: () => boolean;
   onKeyDown?: (event: React.KeyboardEvent, value: string, cursorAtEndPosition: boolean) => void;
   onChange?: (event: React.KeyboardEvent, value: string, lineCount: number) => void;
   onNewLineCount?: (lineCount: number) => void;
@@ -71,7 +73,7 @@ const KeyPressPlugin = ({
           return true; // stop propagation
         }
 
-        // Submit.
+        // Submit (non-multiline).
         if (event.key === key.ENTER && !event.shiftKey && !isMultiline && onSubmit) {
           event.preventDefault();
           editor.getEditorState().read(() => {
@@ -85,6 +87,19 @@ const KeyPressPlugin = ({
             onSubmit?.(value);
           });
           return true; // stop propagation
+        }
+
+        // Maybe submit (multiline) -- only used for urls in multiline mode.
+        if (
+          event.key === key.ENTER &&
+          !event.shiftKey &&
+          isMultiline &&
+          onSubmit &&
+          hasDetectedDestinationUrl?.()
+        ) {
+          event.preventDefault();
+          onSubmit?.(''); // value ignored.
+          return true;
         }
 
         // Tab.
@@ -148,6 +163,7 @@ const KeyPressPlugin = ({
   }, [
     editor,
     isMultiline,
+    hasDetectedDestinationUrl,
     onKeyDown,
     onChange,
     onNewLineCount,
@@ -167,6 +183,7 @@ export type ChatInputProps = {
   placeholder?: string;
   autoFocus?: boolean;
   isMultiline?: boolean;
+  hasDetectedDestinationUrl?: () => boolean;
   onKeyDown?: (event: React.KeyboardEvent, value: string, cursorAtEndPosition: boolean) => void;
   onChange?: (event: React.KeyboardEvent, value: string, lineCount: number) => void;
   onNewLineCount?: (lineCount: number) => void;
@@ -182,6 +199,7 @@ export const ChatInput = ({
   placeholder = '',
   autoFocus = false,
   isMultiline = false,
+  hasDetectedDestinationUrl,
   onKeyDown,
   onChange,
   onNewLineCount,
@@ -216,6 +234,7 @@ export const ChatInput = ({
         {autoFocus && <AutoFocusPlugin />}
         <KeyPressPlugin
           isMultiline={isMultiline}
+          hasDetectedDestinationUrl={hasDetectedDestinationUrl}
           onKeyDown={onKeyDown}
           onChange={onChange}
           onNewLineCount={onNewLineCount}

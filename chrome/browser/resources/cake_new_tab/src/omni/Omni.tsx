@@ -15,6 +15,7 @@ import { SearchResult } from './SearchResult.js';
 import { InlineAutocomplete, InlineAutocompleteHandle, InlineAutocompleteProps } from './InlineAutocomplete.js';
 import { applyCustomSortAndFilterRules } from './utils.js';
 import { key } from '../utils/keyboard.js';
+import { OmniResultType } from './types.js';
 // import { results as fakeResults } from '../dev/data/search.js';
 
 const baseClass = 'omni';
@@ -58,6 +59,8 @@ export const Omni = () => {
   const showSearchResults = useRef<boolean>(false);
   const forceHideSearchResults = useRef<boolean>(false);
   const multilineSubmitButtonRef = useRef<HTMLButtonElement>(null);
+  const urlDetectionEnabled = useRef<boolean>(false);
+  const detectedDestinationUrl = useRef<string | null>(null);
   
   /**
    * = Actions ---------------------
@@ -107,18 +110,73 @@ export const Omni = () => {
     setSearchResultsState({ results: [], focusedIndex: 0 });
   }, []);
 
+  const detectUrl = useCallback((value: string) => {
+    urlDetectionEnabled.current = true;
+    lastRequestQuery.current = value;
+    getProxy().startOmniboxQuery(value);
+  }, [])
+
+  const navToExternalUrl = useCallback((url: string) => {
+    window.location.href = url;
+  }, []);
+
+  const submitQuery = useCallback((value: string) => {
+    console.log('Submit Query:', value);
+  }, []);
+
+  const selectSearchResult = useCallback((result?: OmniSearchResultMatch) => {
+    const { results, focusedIndex } = searchResultsState;
+    const selectedResult = result || results[focusedIndex];
+
+    if (!selectedResult) {
+      console.error(`No selected result found for focused index: ${focusedIndex}`);
+      return;
+    }
+    
+    // Selected search query.
+    if (selectedResult.isSearchType) {
+      const { swapContentsAndDescription, description, contents } = selectedResult;
+      const query = swapContentsAndDescription ? description : contents;
+      submitQuery(query);
+    }
+    // Selected URL/domain.
+    else {
+      navToExternalUrl(selectedResult.destinationUrl);
+    }
+  }, [searchResultsState.results, searchResultsState.focusedIndex, submitQuery, navToExternalUrl]);
+
   /**
    * = Proxy Handlers --------------
    */
 
   const onAutocompleteResponse = useCallback((_, response: OmniboxResponse) => {
-    if (useMultilineStyle || forceHideSearchResults.current) return;
-
     const isForLastRequest = response.inputText === lastRequestQuery.current;
     const valueHasSinceChanged = response.inputText !== currentValue.current.trim();
     if (!isForLastRequest || valueHasSinceChanged) return;
 
     let results = response.combinedResults || [];
+
+    if (urlDetectionEnabled.current) {
+      results = applyCustomSortAndFilterRules(results, response.inputText);
+      const firstResult = results[0];
+      if (
+        firstResult && 
+        firstResult.type === OmniResultType.UrlWhatYouTyped &&
+        firstResult.destinationUrl &&
+        (
+          firstResult.destinationUrl.startsWith('chrome://') || 
+          firstResult.destinationUrl.startsWith('http://') ||
+          firstResult.destinationUrl.startsWith('https://')
+        )
+      ) {
+        detectedDestinationUrl.current = results[0].destinationUrl;
+      } else {
+        detectedDestinationUrl.current = null;
+      }
+      return;
+    }
+
+    if (useMultilineStyle || forceHideSearchResults.current) return;
 
     const allProvidersDone = results.every(r => r.providerDone);
     const useResults = (
@@ -207,11 +265,26 @@ export const Omni = () => {
 
   const onChange = useCallback((_, value: string, lineCount: number) => {
     currentValue.current = value;
+    const trimmedValue = value.trim();
+    const isSingleWord = trimmedValue.split(' ').length === 1;
+    const isMultiline = lineCount > 1;
+
+    const forceUrlDetection = (
+      isSingleWord &&
+      trimmedValue.includes('.') &&
+      (isMultiline || useMultilineStyle)
+    );
+
+    if (urlDetectionEnabled.current && !forceUrlDetection) {
+      urlDetectionEnabled.current = false;
+      detectedDestinationUrl.current = null;
+    }
 
     // Switch to multiline.
-    if (lineCount > 1) {
+    if (isMultiline) {
       hideSearchResults();
       useMultilineStyle || setUseMultilineStyle(true);
+      forceUrlDetection && detectUrl(trimmedValue);
       return;
     }
 
@@ -221,18 +294,21 @@ export const Omni = () => {
       hideSearchResults();
       return;
     }
-
+ 
     // Perform search.
-    value = value.trim();
-    if (value) {
-      !forceHideSearchResults.current && !useMultilineStyle && performSearch(value);
+    if (trimmedValue) {
+      if (!forceHideSearchResults.current && !useMultilineStyle) {
+        performSearch(trimmedValue);
+      } else if (forceUrlDetection) {
+        detectUrl(trimmedValue);
+      }
       return;
     }
 
     // Empty input.
     lastRequestQuery.current = '';
     hideSearchResults();
-  }, [useMultilineStyle, performSearch, hideSearchResults])
+  }, [useMultilineStyle, performSearch, hideSearchResults, detectUrl])
 
   const onEmptyShiftEnter = useCallback(() => {
     forceHideSearchResults.current = true;
@@ -240,9 +316,30 @@ export const Omni = () => {
     useMultilineStyle || setUseMultilineStyle(true);
   }, [hideSearchResults, useMultilineStyle]);
 
-  const onSubmit = useCallback((value: string) => {
-    console.log('SUBMIT', value);
-  }, [])
+  const onSubmit = useCallback(() => {
+    // Select search result.
+    if (showSearchResults.current && searchResultsState.results.length) {
+      selectSearchResult();
+      return;
+    }
+
+    // URL detected while in multiline mode.
+    if (detectedDestinationUrl.current) {
+      navToExternalUrl(detectedDestinationUrl.current);
+      return;
+    }
+
+    // Query exact input value (trimmed).
+    const trimmedValue = currentValue.current.trim();
+    if (trimmedValue) {
+      submitQuery(trimmedValue);
+    }
+  }, [
+    selectSearchResult,
+    searchResultsState.results, 
+    navToExternalUrl,
+    submitQuery,
+  ]);
   
   /**
    * = Effects -----------------------
@@ -348,8 +445,9 @@ export const Omni = () => {
           id={baseClass}
           size='md'
           autoFocus={true}
-          isMultiline={useMultilineStyle}
           placeholder={placeholder}
+          isMultiline={useMultilineStyle}
+          hasDetectedDestinationUrl={() => !!detectedDestinationUrl.current}
           onKeyDown={onKeyDown}
           onTab={onTab}
           onChange={onChange}
@@ -365,6 +463,7 @@ export const Omni = () => {
               key={formatSearchResultKey(r, i)}
               result={r}
               focused={searchResultsState.focusedIndex === i}
+              onClick={() => selectSearchResult(r)}
             />
           ))}
         </div>
@@ -376,7 +475,7 @@ export const Omni = () => {
             size='xs'
             attention='moderate'
             tabIndex={1}
-            onClick={() => onSubmit(currentValue.current)}
+            onClick={() => onSubmit()}
             ref={multilineSubmitButtonRef}
           />
           <Icon
