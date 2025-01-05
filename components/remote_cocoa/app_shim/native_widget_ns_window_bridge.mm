@@ -334,6 +334,9 @@ NativeWidgetMacNSWindow* NativeWidgetNSWindowBridge::CreateNSWindow(
     ns_window.animationBehavior = NSWindowAnimationBehaviorDocumentWindow;
   }
 
+  ns_window.backgroundColor = [NSColor clearColor];
+  ns_window.opaque = NO;
+
   return ns_window;
 }
 
@@ -648,22 +651,43 @@ void NativeWidgetNSWindowBridge::CreateContentView(uint64_t ns_view_id,
       ui::RemoteAccessibility::GetTokenForLocalElement(window_),
       ui::RemoteAccessibility::GetTokenForLocalElement(bridged_view_));
 
+  // Create and configure the visual effect view for background blur.
+  NSVisualEffectView* effectView = [[NSVisualEffectView alloc] 
+      initWithFrame:[bridged_view_ bounds]];
+  [effectView setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
+  [effectView setBlendingMode:NSVisualEffectBlendingModeBehindWindow];
+  [effectView setMaterial:NSVisualEffectMaterialPopover];
+  [effectView setState:NSVisualEffectStateActive];
+  [effectView setAppearance:[NSAppearance appearanceNamed:NSAppearanceNameDarkAqua]];
+  [effectView setEmphasized:YES];
+  [bridged_view_ addSubview:effectView];
+
+  // Create an tint overlay view that can adjust to the theme of the page.
+  NSView* tintOverlay = [[NSView alloc] initWithFrame:[bridged_view_ bounds]];
+  [tintOverlay setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
+  [tintOverlay setWantsLayer:YES];
+  tintOverlay.layer.backgroundColor = [[NSColor colorWithRed:0.0/255.0 green:0.0/255.0 blue:0.0/255.0 alpha:0.0] CGColor];
+  [bridged_view_ addSubview:tintOverlay];
+
   // Beware: This view was briefly removed (in favor of a bare CALayer) in
   // https://crrev.com/c/1236675. The ordering of unassociated layers relative
   // to NSView layers is undefined on macOS 10.12 and earlier, so the compositor
   // layer ended up covering up subviews (see https://crbug.com/899499).
-  NSView* compositor_view =
-      [[ViewsCompositorSuperview alloc] initWithFrame:[bridged_view_ bounds]];
-  [compositor_view
-      setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
+  NSView* compositor_view = [[ViewsCompositorSuperview alloc] initWithFrame:[bridged_view_ bounds]];
+  [compositor_view setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
+
   auto* background_layer = [CALayer layer];
-  display_ca_layer_tree_ =
-      std::make_unique<ui::DisplayCALayerTree>(background_layer);
+  display_ca_layer_tree_ = std::make_unique<ui::DisplayCALayerTree>(background_layer);
+
   [compositor_view setLayer:background_layer];
   [compositor_view setWantsLayer:YES];
+
+  [background_layer setBackgroundColor:[[NSColor clearColor] CGColor]];
   [bridged_view_ addSubview:compositor_view];
 
   [bridged_view_ setWantsLayer:YES];
+  [[bridged_view_ layer] setBackgroundColor:[[NSColor clearColor] CGColor]];
+
   [window_ setContentView:bridged_view_];
 }
 

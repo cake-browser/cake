@@ -43,6 +43,7 @@
 #include "ui/gfx/font_list.h"
 #include "ui/views/controls/menu/menu_runner.h"
 #include "ui/views/widget/native_widget.h"
+#include "ui/compositor/layer.h"
 
 #if BUILDFLAG(IS_CHROMEOS)
 #include "chromeos/ui/base/window_properties.h"
@@ -136,6 +137,7 @@ void BrowserFrame::InitBrowserFrame() {
   params.name = "BrowserFrame";
   params.delegate = browser_view_;
   params.headless_mode = headless::IsHeadlessMode();
+  params.opacity = Widget::InitParams::WindowOpacity::kTranslucent;
 
   Browser* browser = browser_view_->browser();
   if (browser->is_type_picture_in_picture()) {
@@ -195,6 +197,13 @@ void BrowserFrame::InitBrowserFrame() {
   if (!native_browser_frame_->UsesNativeSystemMenu()) {
     DCHECK(non_client_view());
     non_client_view()->set_context_menu_controller(this);
+  }
+
+  // Make the layer transparent.
+  if (ui::Layer* layer = GetLayer()) {
+    layer->SetFillsBoundsOpaquely(false);
+    layer->SetShowSolidColorContent();  // Convert to LAYER_SOLID_COLOR
+    layer->SetColor(SkColorSetARGB(0, 0, 0, 0));
   }
 }
 
@@ -309,6 +318,14 @@ void BrowserFrame::UserChangedTheme(BrowserThemeChangeType theme_change_type) {
 
   if (!theme_changed_observer.theme_changed()) {
     ThemeChanged();
+  }
+
+    // Make the layer non-opaque
+  if (ui::Layer* layer = GetLayer()) {
+    layer->SetFillsBoundsOpaquely(false);
+    layer->SetShowSolidColorContent();  // Convert to LAYER_SOLID_COLOR
+    layer->SetColor(SkColorSetARGB(125, 47, 50, 55));
+    layer->SetBackgroundBlur(30.f);
   }
 }
 

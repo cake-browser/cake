@@ -56,6 +56,13 @@ class VIEWS_EXPORT Painter {
                                 gfx::Canvas* canvas,
                                 Painter* focus_painter);
 
+  // Creates a painter that draws a blurred background with a glassy effect.
+  // |color| specifies the background color
+  // |blur_radius| specifies the blur radius in pixels (must be > 0)
+  static std::unique_ptr<Painter> CreateBlurredBackgroundPainter(
+      SkColor color,
+      float blur_radius);
+
   // Creates a painter that draws a RoundRect with a solid color and given
   // corner radius.
   static std::unique_ptr<Painter> CreateSolidRoundRectPainter(

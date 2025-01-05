@@ -13,6 +13,7 @@
 #include "ui/gfx/geometry/size.h"
 #include "ui/gfx/native_widget_types.h"
 #include "ui/views/layout/layout_manager.h"
+#include "ui/compositor_extra/shadow.h"
 
 class BookmarkBarView;
 class BrowserView;
@@ -238,6 +239,8 @@ class BrowserViewLayout : public views::LayoutManager {
   // The distance the web contents modal dialog is from the top of the dialog
   // host widget.
   int dialog_top_y_ = -1;
+
+  std::unique_ptr<ui::Shadow> contents_shadow_;
 };
 
 #endif  // CHROME_BROWSER_UI_VIEWS_FRAME_BROWSER_VIEW_LAYOUT_H_

@@ -455,8 +455,10 @@ void NativeWidgetMacNSWindowHost::InitWindow(
   {
     auto window_params = NativeWidgetNSWindowInitParams::New();
     window_params->modal_type = widget->widget_delegate()->GetModalType();
-    window_params->is_translucent =
-        params.opacity == Widget::InitParams::WindowOpacity::kTranslucent;
+    window_params->is_translucent = true;
+
+    // window_params->is_translucent =
+    //     params.opacity == Widget::InitParams::WindowOpacity::kTranslucent;
     window_params->is_headless_mode_window = is_headless_mode_window_;
     window_params->is_tooltip = is_tooltip;
 
@@ -612,8 +614,8 @@ void NativeWidgetMacNSWindowHost::CreateCompositor(
 
   // "Infer" must be handled by ViewsDelegate::OnBeforeWidgetInit().
   DCHECK_NE(Widget::InitParams::WindowOpacity::kInferred, params.opacity);
-  bool translucent =
-      params.opacity == Widget::InitParams::WindowOpacity::kTranslucent;
+  bool translucent = true;
+      // params.opacity == Widget::InitParams::WindowOpacity::kTranslucent;
 
   // Create the layer.
   SetLayer(std::make_unique<ui::Layer>(params.layer_type));

@@ -4679,7 +4679,7 @@ void BrowserView::OnThemeChanged() {
   if (!initialized_) {
     return;
   }
-
+  SetBackground(nullptr);
   FrameColorsChanged();
 }
 

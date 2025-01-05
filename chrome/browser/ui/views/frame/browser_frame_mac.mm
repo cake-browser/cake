@@ -367,11 +367,7 @@ void BrowserFrameMac::PopulateCreateWindowParams(
   } else if (browser_view_->GetIsNormalType() ||
              browser_view_->GetIsWebAppType()) {
     params->window_class = remote_cocoa::mojom::WindowClass::kBrowser;
-
-    // CAKE.DEV
     params->style_mask |= NSWindowStyleMaskFullSizeContentView;
-
-    // Ensure tabstrip/profile button are visible.
     params->titlebar_appears_transparent = true;
 
     // Hosted apps draw their own window title.
@@ -399,6 +395,14 @@ NativeWidgetMacNSWindow* BrowserFrameMac::CreateNSWindow(
 
   NSButton *zoomButton = [ns_window standardWindowButton:NSWindowZoomButton];
   [zoomButton setHidden:YES];
+
+  [ns_window setBackgroundColor:[NSColor clearColor]];
+  [ns_window setOpaque:NO];
+
+  // Configure window for transparency
+  [ns_window setBackgroundColor:[NSColor clearColor]];
+  [ns_window setOpaque:NO];
+  [ns_window setHasShadow:YES];
 
   return ns_window;
 }

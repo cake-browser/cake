@@ -20,10 +20,49 @@
 #include "ui/gfx/nine_image_painter.h"
 #include "ui/gfx/scoped_canvas.h"
 #include "ui/views/view.h"
+#include "third_party/skia/include/core/SkTileMode.h"
+#include "third_party/skia/include/effects/SkImageFilters.h"
 
 namespace views {
 
 namespace {
+
+class BlurredBackgroundPainter : public Painter {
+ public:
+  BlurredBackgroundPainter(SkColor color, float blur_radius)
+      : color_(color), blur_radius_(blur_radius) {}
+
+  BlurredBackgroundPainter(const BlurredBackgroundPainter&) = delete;
+  BlurredBackgroundPainter& operator=(const BlurredBackgroundPainter&) = delete;
+
+  ~BlurredBackgroundPainter() override = default;
+
+  // Painter:
+  gfx::Size GetMinimumSize() const override { return gfx::Size(); }
+
+  void Paint(gfx::Canvas* canvas, const gfx::Size& size) override {
+    cc::PaintFlags flags;
+    flags.setColor(color_);
+    flags.setAntiAlias(true);
+
+    // First draw the background color
+    canvas->DrawRect(gfx::Rect(size), flags);
+
+    flags.setImageFilter(sk_make_sp<cc::BlurPaintFilter>(
+        blur_radius_,     // sigma_x
+        blur_radius_,     // sigma_y
+        SkTileMode::kClamp,  // tile mode
+        nullptr,            // input filter
+        nullptr            // crop rect
+    ));
+
+    canvas->DrawRect(gfx::Rect(size), flags);
+  }
+
+ private:
+  const SkColor color_;
+  const float blur_radius_;
+};
 
 // SolidRoundRectPainter -------------------------------------------------------
 
@@ -265,6 +304,13 @@ void Painter::PaintFocusPainter(View* view,
                                 Painter* focus_painter) {
   if (focus_painter && view->HasFocus())
     PaintPainterAt(canvas, focus_painter, view->GetLocalBounds());
+}
+
+// static
+std::unique_ptr<Painter> Painter::CreateBlurredBackgroundPainter(
+    SkColor color,
+    float blur_radius) {
+  return std::make_unique<BlurredBackgroundPainter>(color, blur_radius);
 }
 
 // static

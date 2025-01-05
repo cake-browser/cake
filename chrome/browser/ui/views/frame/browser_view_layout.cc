@@ -52,6 +52,9 @@
 #include "ui/views/widget/widget_observer.h"
 #include "ui/views/window/client_view.h"
 #include "ui/views/window/hit_test_utils.h"
+#include "ui/compositor_extra/shadow.h"
+#include "ui/compositor/layer.h"
+#include "ui/gfx/geometry/rounded_corners_f.h"
 
 using views::View;
 using web_modal::ModalDialogHostObserver;
@@ -65,6 +68,10 @@ const int kTabShadowSize = 2;
 // The number of pixels the constrained window should overlap the bottom
 // of the omnibox.
 const int kConstrainedWindowOverlap = 3;
+
+// The inset applied to the contents container.
+const int kContentsContainerInset = 10;
+const int kContentsContainerInsetTop = 10;
 
 // Combines View::ConvertPointToTarget and View::HitTest for a given |point|.
 // Converts |point| from |src| to |dst| and hit tests it against |dst|. The
@@ -425,6 +432,7 @@ int BrowserViewLayout::NonClientHitTest(const gfx::Point& point) {
 void BrowserViewLayout::Layout(views::View* browser_view) {
   TRACE_EVENT0("ui", "BrowserViewLayout::Layout");
   vertical_layout_rect_ = browser_view->GetLocalBounds();
+
   int top_inset = delegate_->GetTopInsetInBrowserView();
   int top = LayoutTitleBarForWebApp(top_inset);
   if (delegate_->ShouldLayoutTabStrip()) {
@@ -443,7 +451,7 @@ void BrowserViewLayout::Layout(views::View* browser_view) {
   UpdateTopContainerBounds();
 
   // Layout items at the bottom of the view.
-  const int bottom = LayoutDownloadShelf(browser_view->height());
+  int bottom = LayoutDownloadShelf(browser_view->height());
 
   // Layout the contents container in the remaining space.
   LayoutContentsContainerView(top, bottom);
@@ -720,19 +728,38 @@ void BrowserViewLayout::LayoutContentsContainerView(int top, int bottom) {
   TRACE_EVENT0("ui", "BrowserViewLayout::LayoutContentsContainerView");
   // |contents_container_| contains web page contents and devtools.
   // See browser_view.h for details.
-  gfx::Rect contents_container_bounds(vertical_layout_rect_.x(), top,
-                                      vertical_layout_rect_.width(),
-                                      std::max(0, bottom - top));
+  gfx::Rect contents_container_bounds(
+      vertical_layout_rect_.x() + kContentsContainerInset,
+      top + kContentsContainerInsetTop,
+      vertical_layout_rect_.width() - (2 * kContentsContainerInset),
+      std::max(0, bottom - top - kContentsContainerInset - kContentsContainerInsetTop));
+
   if (webui_tab_strip_ && webui_tab_strip_->GetVisible()) {
     // The WebUI tab strip container should "push" the tab contents down without
     // resizing it.
     contents_container_bounds.Inset(
         gfx::Insets().set_bottom(-webui_tab_strip_->size().height()));
   }
+  
+  // Enable layer for corner radius and shadow.
+  contents_container_->SetPaintToLayer();
+  ui::Layer* layer = contents_container_->layer();
+  layer->SetRoundedCornerRadius(gfx::RoundedCornersF(6.0f));
 
   LayoutSidePanelView(unified_side_panel_, contents_container_bounds);
 
   contents_container_->SetBoundsRect(contents_container_bounds);
+
+  // Create and initialize shadow if it doesn't exist
+  if (!contents_shadow_) {
+    contents_shadow_ = std::make_unique<ui::Shadow>();
+    contents_shadow_->Init(5);
+    contents_shadow_->SetRoundedCornerRadius(6);
+    contents_shadow_->layer()->SetName("ContentsContainerShadow");
+    contents_container_->layer()->parent()->Add(contents_shadow_->layer());
+  }
+
+  contents_shadow_->SetContentBounds(contents_container_->bounds());
 }
 
 void BrowserViewLayout::LayoutSidePanelView(
