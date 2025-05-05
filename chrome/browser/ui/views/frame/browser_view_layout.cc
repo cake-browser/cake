@@ -70,8 +70,10 @@ const int kTabShadowSize = 2;
 const int kConstrainedWindowOverlap = 3;
 
 // The inset applied to the contents container.
-const int kContentsContainerInset = 10;
-const int kContentsContainerInsetTop = 10;
+const int kContentsContainerInsetTop = 11;
+const int kContentsContainerInsetBottom = 11;
+const int kContentsContainerInsetLeft = 11;
+const int kContentsContainerInsetRight = 11;
 
 // Combines View::ConvertPointToTarget and View::HitTest for a given |point|.
 // Converts |point| from |src| to |dst| and hit tests it against |dst|. The
@@ -729,10 +731,10 @@ void BrowserViewLayout::LayoutContentsContainerView(int top, int bottom) {
   // |contents_container_| contains web page contents and devtools.
   // See browser_view.h for details.
   gfx::Rect contents_container_bounds(
-      vertical_layout_rect_.x() + kContentsContainerInset,
+      vertical_layout_rect_.x() + kContentsContainerInsetLeft,
       top + kContentsContainerInsetTop,
-      vertical_layout_rect_.width() - (2 * kContentsContainerInset),
-      std::max(0, bottom - top - kContentsContainerInset - kContentsContainerInsetTop));
+      vertical_layout_rect_.width() - kContentsContainerInsetLeft - kContentsContainerInsetRight,
+      std::max(0, bottom - top - kContentsContainerInsetBottom - kContentsContainerInsetTop));
 
   if (webui_tab_strip_ && webui_tab_strip_->GetVisible()) {
     // The WebUI tab strip container should "push" the tab contents down without
@@ -750,7 +752,6 @@ void BrowserViewLayout::LayoutContentsContainerView(int top, int bottom) {
 
   contents_container_->SetBoundsRect(contents_container_bounds);
 
-  // Create and initialize shadow if it doesn't exist
   if (!contents_shadow_) {
     contents_shadow_ = std::make_unique<ui::Shadow>();
     contents_shadow_->Init(5);
